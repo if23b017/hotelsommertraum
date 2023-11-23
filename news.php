@@ -56,7 +56,7 @@ session_start();
                     ?>
                 </h2>
                 <?php
-                //TODO: wieder einfügen nach Video
+
                 /*if (empty($_SESSION["title"]) && empty($_SESSION["fileToUpload"]) && empty($_SESSION["text"]) && empty($_SESSION["newsdate"])) {
                     echo '<div class="text-center"><h2>Derzeit gibt es keine News!</h2></div>';
                 }
