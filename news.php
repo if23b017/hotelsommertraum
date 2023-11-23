@@ -24,45 +24,45 @@ session_start();
 
         <h1>News</h1>
 
-        <div class="d-grid col-8 mx-auto">
-            <div class="mb-3">
-                <div class="text-center">
-                    <h2>
-                        <?php
-                        if (isset($_SESSION["title"])) {
-                            echo $_SESSION["title"];
-                        } ?>
-                    </h2>
-                </div>
-                <div class="text-center">
-                    <?php
-                    if (isset($_SESSION["fileToUpload"])) {
-                        echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
-                    }
-                    ?>
-                </div>
-                <p style="text-align: center;">
-                    <?php
-                    if (isset($_SESSION["text"])) {
-                        echo $_SESSION["text"];
-                    }
-                    ?>
-                </p>
+        <div class="d-grid gap-3 col-8 mx-auto">
+
+            <div class="text-center">
                 <h2>
                     <?php
-                    if (isset($_SESSION["newsdate"])) {
-                        echo "Hochgeladen am " . $_SESSION["newsdate"];
-                    }
-                    ?>
+                    if (isset($_SESSION["title"])) {
+                        echo $_SESSION["title"];
+                    } ?>
                 </h2>
+            </div>
+            <div class="text-center">
                 <?php
-
-                /*if (empty($_SESSION["title"]) && empty($_SESSION["fileToUpload"]) && empty($_SESSION["text"]) && empty($_SESSION["newsdate"])) {
-                    echo '<div class="text-center"><h2>Derzeit gibt es keine News!</h2></div>';
+                if (isset($_SESSION["fileToUpload"])) {
+                    echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
                 }
-                */
                 ?>
             </div>
+            <p style="text-align: justify;">
+                <?php
+                if (isset($_SESSION["text"])) {
+                    echo $_SESSION["text"];
+                }
+                ?>
+            </p>
+            <h2>
+                <?php
+                if (isset($_SESSION["newsdate"])) {
+                    echo "Hochgeladen am " . $_SESSION["newsdate"];
+                }
+                ?>
+            </h2>
+            <?php
+
+
+            /*if (empty($_SESSION["title"]) && empty($_SESSION["fileToUpload"]) && empty($_SESSION["text"]) && empty($_SESSION["newsdate"])) {
+                echo '<div class="text-center"><h2>Derzeit gibt es keine News!</h2></div>';
+            }
+            */
+            ?>
 
 
 
@@ -81,7 +81,7 @@ session_start();
                     ein verbessertes und unvergessliches Erlebnis bieten zu können. Wir freuen uns schon auf Ihren
                     Besuch!
                 </p>
-                <h3>News vom 22.11.2023</h3>
+                <h3>News vom 10.11.2023</h3>
             </div>
             <div class="mb-3">
                 <div class="text-center">

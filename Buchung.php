@@ -24,9 +24,9 @@ session_start();
             <div class="row row-cols-3 align-items-start">
                 <div class="col">
                     <div class="card" class="" style="width: 18rem;" data-bs-theme="white">
-                        <img src="img/zimmer1.jpg" class="card-img-top" alt="Zimmer 3">
+                        <img src="img/zimmer1.jpg" class="card-img-top" alt="Zimmer 1" height="170" width="auto">
                         <div class="card-body">
-                            <h5 class="card-title">Einzelbett - Zimmer</h5>
+                            <h5 class="card-title">Doppelbettzimmer</h5>
                             <p class="card-text">50€ / Nacht<br>⠀</p>
                             <a href="zimmer1.php" class="btn btn-primary">Jetzt Reservieren</a>
                         </div>
@@ -34,9 +34,9 @@ session_start();
                 </div>
                 <div class="col">
                     <div class="card" class="" style="width: 18rem;" data-bs-theme="white">
-                        <img src="img/zimmer2.jpg" class="card-img-top" alt="Zimmer 1">
+                        <img src="img/zimmer2.jpg" class="card-img-top" alt="Zimmer 2" height="170" width="auto">
                         <div class="card-body">
-                            <h5 class="card-title">Einzelsuite</h5>
+                            <h5 class="card-title">Luxussuite</h5>
                             <p class="card-text">100€ / Nacht<br>⠀</p>
                             <a href="zimmer2.php" class="btn btn-primary">Jetzt Reservieren</a>
                         </div>
@@ -44,9 +44,9 @@ session_start();
                 </div>
                 <div class="col">
                     <div class="card" class="" style="width: 18rem;" data-bs-theme="white">
-                        <img src="img/zimmer3.jpg" class="card-img-top" alt="Zimmer 2">
+                        <img src="img/zimmer3.jpg" class="card-img-top" alt="Zimmer 3" height="170" width="auto">
                         <div class="card-body">
-                            <h5 class="card-title">Doppelsuite</h5>
+                            <h5 class="card-title">Luxussuite mit Jacuzzi</h5>
                             <p class="card-text">180€ / Nacht<br>⠀</p>
                             <a href="zimmer2.php" class="btn btn-primary">Jetzt Reservieren</a>
                         </div>
