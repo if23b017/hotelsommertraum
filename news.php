@@ -68,27 +68,10 @@ session_start();
 
             <div class="mb-3">
                 <div class="text-center">
-                    <h2>Neueröffnung - Hotel Sommertraum</h2>
-                </div>
-                <div class="text-center">
-                    <img src="img/newsthumbnails/newsarticle1.jpg" alt="News1" width="700" height:"auto"
-                        class="img-thumbnail">
-                </div>
-                <br>
-                <p style="text-align: justify;">
-                    Erleben Sie den Komfort unserer frisch renovierten Zimmer, entspannen Sie sich am Pool und genießen
-                    Sie kulinarische Köstlichkeiten in unseren hervorragenden Restaurants. Wir sind stolz darauf, Ihnen
-                    ein verbessertes und unvergessliches Erlebnis bieten zu können. Wir freuen uns schon auf Ihren
-                    Besuch!
-                </p>
-                <h3>News vom 10.11.2023</h3>
-            </div>
-            <div class="mb-3">
-                <div class="text-center">
                     <h2>Unsere Umgebung</h2>
                 </div>
                 <div class="text-center">
-                    <img src="img/newsthumbnails/newsarticle2.jpg" alt="News1" width="700" height:"auto"
+                    <img src="img/newsthumbnails/newsarticle2.jpg" alt="News2" width="700" height:"auto"
                         class="img-thumbnail">
                 </div>
                 <br>
@@ -100,6 +83,22 @@ session_start();
                     Landschaften oder lassen Sie sich von kulturellen Highlights verzaubern.
                 </p>
                 <h3>News vom 21.11.2023</h3>
+            </div>
+            <div class="mb-3">
+                <div class="text-center">
+                    <h2>Neueröffnung - Hotel Sommertraum</h2>
+                </div>
+                <div class="text-center">
+                    <img src="img/newsthumbnails/newsarticle1.jpg" alt="News1" width="700" height:"auto"
+                        class="img-thumbnail">
+                </div>
+                <br>
+                <p style="text-align: justify;">
+                    Erleben Sie den Komfort unserer frisch renovierten Zimmer, entspannen Sie sich am Pool und genießen
+                    Sie kulinarische Köstlichkeiten in unseren hervorragenden Restaurants. Wir sind stolz darauf, Ihnen
+                    ein verbessertes und unvergessliches Erlebnis bieten zu können.
+                </p>
+                <h3>News vom 10.11.2023</h3>
 
             </div>
         </div>

@@ -108,6 +108,16 @@ session_start();
         }
         ?>
 
+
+        <div class="mb-3">
+            <div class="d-grid gap-4 col-5 mx-auto">
+                <a class="btn btn-primary" role="button" href="reservierungen.php">Meine Reservierungen</a>
+            </div>
+        </div>
+
+
+        <br>
+
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="container">
                 <div class="d-grid gap-3 col-5 mx-auto">

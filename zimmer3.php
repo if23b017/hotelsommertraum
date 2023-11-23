@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$_SESSION['zimmer'] = 'Einzelbett Zimmer';
+$_SESSION['zimmer'] = 'Luxussuite mit Jacuzzi';
 
 header("Location: reservierung.php");
 exit();
