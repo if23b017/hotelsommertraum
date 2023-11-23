@@ -78,7 +78,7 @@ session_start();
                 <p style="text-align: justify;">
                     Erleben Sie den Komfort unserer frisch renovierten Zimmer, entspannen Sie sich am Pool und genießen
                     Sie kulinarische Köstlichkeiten in unseren hervorragenden Restaurants. Wir sind stolz darauf, Ihnen
-                    ein verbessertes und unvergessliches Erlebnis bieten zu können. Wir freuen uns schon sehr auf Ihren
+                    ein verbessertes und unvergessliches Erlebnis bieten zu können. Wir freuen uns schon auf Ihren
                     Besuch!
                 </p>
                 <h3>News vom 22.11.2023</h3>
