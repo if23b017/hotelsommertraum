@@ -45,7 +45,7 @@ session_start();
                 empty($_SESSION['zimmer']) && empty($_SESSION['arrival']) && empty($_SESSION['departure'])
                 && empty($_SESSION['breakfast']) && empty($_SESSION['parking']) && empty($_SESSION['tiere'])
             ) {
-                echo '<h2>Du hast derzeit keine Buchungen</h2>';
+                echo '<h2>Du hast derzeit keine Buchungen!</h2>';
             }
             ?>
         </h3>
