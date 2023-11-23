@@ -203,6 +203,7 @@ session_start();
     </form>
 
 
+    <div class="container col-5" style="margin-bottom: 150px;" >
 
     <?php
     if (isset($_POST["newPassword"])) {
@@ -217,6 +218,8 @@ session_start();
         }
     }
     ?>
+
+    </div>
 
 
 
