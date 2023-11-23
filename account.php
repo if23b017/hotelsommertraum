@@ -75,6 +75,7 @@ session_start();
             if (empty($_POST["oldPassword"]) || empty($_POST["newPassword"]) || empty($_POST["newPassword2"])) {
                 $passwordErr = "*Passwort erforderlich";
             }
+            //error bei Email Änderung im Profil
             if (strlen($_POST["newPassword"]) < 8) {
                 $passwordErrLength = "*Passwort muss mindestens 8 Zeichen lang sein";
             }
