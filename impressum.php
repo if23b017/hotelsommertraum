@@ -47,11 +47,11 @@ session_start();
       <div class="row align-items-end ">
         <div class="col">
           <p>Raphael Leitgeb</p>
-          <img src="img/Foto_FH-Ausweis_Leitgeb.png" alt="Raphael" title="Raphael" height="350" />
+          <img src="img/Leitgeb.png" alt="Raphael" title="Raphael" height="350" />
         </div>
         <div class="col">
           <p>Andy Mihalca</p>
-          <img src="img/Foto_FH-Ausweis_Mihalca.jpg" alt="Andy" title="Andy" height="350" />
+          <img src="img/Mihalca.jpg" alt="Andy" title="Andy" height="350" />
         </div>
       </div>
     </div>
