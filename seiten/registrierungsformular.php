@@ -299,6 +299,21 @@ session_start();
       $anredeErr == "" && $emailErr == "" && $firstnameErr == "" && $lastnameErr == "" && $passwordErr == "" && $passwordErr2 == "" && $dateErr == "" &&
       $passwordErrLength == "" && $passwordErrNumber == "" && $passwordErrBig == "" && $passwordErrLow == "" && $anrede != ""
     ) {
+      require_once '../utils/dbaccess.php';
+      
+      $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
+      VALUES ('?','?','?','?','?','?','?')";
+
+      $stmt = mysqli_stmt_init($conn);
+      if (!mysqli_stmt_prepare($stmt, $sql)) {
+        echo "SQL statement failed!";
+      } else {
+        $user = "user";
+        mysqli_stmt_bind_param($stmt, "sssssss", $email, $password, $user, $firstname, $lastname, $anrede, $date);
+        mysqli_stmt_execute($stmt);
+      }
+      mysqli_stmt_close($stmt);
+
       $_SESSION["login"] = true;
       $_SESSION["anrede"] = $_POST["anrede"];
       $_SESSION["email"] = $_POST["email"];
