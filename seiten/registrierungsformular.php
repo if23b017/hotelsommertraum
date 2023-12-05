@@ -302,26 +302,21 @@ session_start();
       require_once '../utils/dbaccess.php';
       
       $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
-      VALUES ('?','?','?','?','?','?','?')";
+      VALUES (?, ?, ?, ?, ?, ?, ?);";
 
       $stmt = mysqli_stmt_init($conn);
       if (!mysqli_stmt_prepare($stmt, $sql)) {
         echo "SQL statement failed!";
       } else {
         $user = "user";
-        mysqli_stmt_bind_param($stmt, "sssssss", $email, $password, $user, $firstname, $lastname, $anrede, $date);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        mysqli_stmt_bind_param($stmt, "sssssss", $email, $hashedPassword, $user, $firstname, $lastname, $anrede, $date);
         mysqli_stmt_execute($stmt);
       }
       mysqli_stmt_close($stmt);
 
       $_SESSION["login"] = true;
-      $_SESSION["anrede"] = $_POST["anrede"];
       $_SESSION["email"] = $_POST["email"];
-      $_SESSION["firstname"] = $_POST["firstname"];
-      $_SESSION["lastname"] = $_POST["lastname"];
-      $_SESSION["date"] = $_POST["date"];
-      //TODO: Passwort verschlüsseln
-      $_SESSION["password"] = $_POST["password"];
       echo "<a href='account.php'>
     <p>Zu Ihrem Profil</p>
   </a>";
