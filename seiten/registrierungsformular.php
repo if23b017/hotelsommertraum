@@ -301,12 +301,12 @@ session_start();
     ) {
       require_once '../utils/dbaccess.php';
       
-      if $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
-      VALUES (?, ?, ?, ?, ?, ?, ?);";
-
       if ($sql = "SELECT email FROM users WHERE email='$email'") {
         echo "Diese E-Mail-Adresse ist bereits registriert!";
       }
+      
+      $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
+      VALUES (?, ?, ?, ?, ?, ?, ?);";
 
       $stmt = mysqli_stmt_init($conn);
       if (!mysqli_stmt_prepare($stmt, $sql)) {
