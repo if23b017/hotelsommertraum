@@ -285,12 +285,6 @@ session_start();
         } else {
           echo "*erforderlich";
         }
-        if (
-          $anredeErr == "" && $emailErr == "" && $firstnameErr == "" && $lastnameErr == "" && $passwordErr == "" &&
-          $passwordErr2 == "" && $dateErr == ""
-        ) {
-          echo "Herzlich Willkommen " . $_POST["anrede"] . " " . $_POST["lastname"] . "! <br>";
-        }
       }
       ?>
     </p>
@@ -299,13 +293,24 @@ session_start();
       $anredeErr == "" && $emailErr == "" && $firstnameErr == "" && $lastnameErr == "" && $passwordErr == "" && $passwordErr2 == "" && $dateErr == "" &&
       $passwordErrLength == "" && $passwordErrNumber == "" && $passwordErrBig == "" && $passwordErrLow == "" && $anrede != ""
     ) {
+
       require_once '../utils/dbaccess.php';
-      
-      if ($sql = "SELECT email FROM users WHERE email='$email'") {
-        echo "Diese E-Mail-Adresse ist bereits registriert!";
-        return;
+    
+      $sql = "SELECT * FROM users WHERE email=?;";
+      $stmt = mysqli_stmt_init($conn);
+      $email = $_POST["email"];
+      if (!mysqli_stmt_prepare($stmt, $sql)) {
+        echo "SQL statement failed!";
       }
-      
+      mysqli_stmt_bind_param($stmt, "s", $email);
+      mysqli_stmt_execute($stmt);
+            
+      $result = mysqli_stmt_get_result($stmt);
+      if (mysqli_fetch_assoc($result) == true) {
+        echo "Diese E-Mail-Adresse ist bereits registriert!";
+      } else {
+
+        
       $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
       VALUES (?, ?, ?, ?, ?, ?, ?);";
 
@@ -322,9 +327,12 @@ session_start();
 
       $_SESSION["login"] = true;
       $_SESSION["email"] = $_POST["email"];
-      echo "<a href='account.php'>
-    <p>Zu Ihrem Profil</p>
-  </a>";
+      echo "Herzlich Willkommen " . $_POST["anrede"] . " " . $_POST["lastname"] . "! <br>";
+      echo "<a href='../seiten/account.php'>
+      <p>Zu Ihrem Profil</p>
+      </a>";
+}
+
     }
 
     ?>
