@@ -20,7 +20,7 @@
           <?php
           if ($_SESSION["login"] == true) {
             echo '<li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.php">
+                        <a class="nav-link" aria-current="page" href="../seiten/index.php">
                           <h4>Home</h4>
                         </a>
                         <li class="nav-item">
@@ -38,7 +38,7 @@
           } else {
             $_SESSION["login"] = false;
             echo '<li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.php">
+                        <a class="nav-link" aria-current="page" href="../seiten/index.php">
                           <h4>Home</h4>
                         </a>
                         <li class="nav-item">
@@ -48,7 +48,7 @@
           }
           ?>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="news.php">
+            <a class="nav-link" aria-current="page" href="../seiten/news.php">
               <h4>News</h4>
             </a>
           </li>
