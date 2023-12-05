@@ -11,7 +11,7 @@ session_start();
   <title>Hotel Sommertraum: Registrierung</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
@@ -301,8 +301,12 @@ session_start();
     ) {
       require_once '../utils/dbaccess.php';
       
-      $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
+      if $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
       VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+      if ($sql = "SELECT email FROM users WHERE email='$email'") {
+        echo "Diese E-Mail-Adresse ist bereits registriert!";
+      }
 
       $stmt = mysqli_stmt_init($conn);
       if (!mysqli_stmt_prepare($stmt, $sql)) {

@@ -6,6 +6,6 @@ $_SESSION["registered"] = false;
 $_SESSION["admin"] = false;
 
 
-header("Location: index.php");
+header("Location: ../seiten/index.php");
 exit();
 ?>
