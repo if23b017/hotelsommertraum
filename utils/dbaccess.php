@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$dbname = 'bif1webtechdb';
+$dbname = 'hotel_db';
 $username = 'your_username';
 $password = 'your_password';
 

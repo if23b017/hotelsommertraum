@@ -17,7 +17,7 @@ session_start();
 
 <body>
 
-    <?php include 'navbar.php'; ?>
+    <?php include '../utils/navbar.php'; ?>
 
 
     <div style="margin-bottom: 100px;">
@@ -105,7 +105,7 @@ session_start();
     </div>
 
 
-    <?php include 'footer.php'; ?>
+    <?php include '../utils/footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
         </script>

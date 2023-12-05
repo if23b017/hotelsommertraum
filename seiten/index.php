@@ -25,7 +25,7 @@ if (!isset($_SESSION["admin"])) {
 ?>
 
 
-<?php include 'navbar.php'; ?>
+<?php include '../utils/navbar.php'; ?>
 
 <div class="container" style="margin-bottom: 100px;">
   <div class=überschrift class="container-xxl">
@@ -38,7 +38,7 @@ if (!isset($_SESSION["admin"])) {
   </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../utils/footer.php'; ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
