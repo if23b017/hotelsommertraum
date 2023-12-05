@@ -303,6 +303,7 @@ session_start();
       
       if ($sql = "SELECT email FROM users WHERE email='$email'") {
         echo "Diese E-Mail-Adresse ist bereits registriert!";
+        return;
       }
       
       $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) 
