@@ -37,6 +37,7 @@ session_start();
             <div class="text-center">
                 <?php
                 if (isset($_SESSION["fileToUpload"])) {
+                    //TODO: Bild aus der Datenbank
                     echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
                 }
                 ?>
@@ -71,7 +72,7 @@ session_start();
                     <h2>Unsere Umgebung</h2>
                 </div>
                 <div class="text-center">
-                    <img src="img/newsthumbnails/newsarticle2.jpg" alt="News2" width="700" height:"auto"
+                    <img src="../img/newsthumbnails/newsarticle2.jpg" alt="News2" width="700" height:"auto"
                         class="img-thumbnail">
                 </div>
                 <br>
@@ -89,7 +90,7 @@ session_start();
                     <h2>Neueröffnung - Hotel Sommertraum</h2>
                 </div>
                 <div class="text-center">
-                    <img src="img/newsthumbnails/newsarticle1.jpg" alt="News1" width="700" height:"auto"
+                    <img src="../img/newsthumbnails/newsarticle1.jpg" alt="News1" width="700" height:"auto"
                         class="img-thumbnail">
                 </div>
                 <br>
