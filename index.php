@@ -4,17 +4,9 @@ session_start();
 <!DOCTYPE html>
 <html lang="de">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hotel Sommertraum</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <link rel="stylesheet" href="../css/style.css">
-</head>
+<?php include '../utils/head.php'; ?>
 
-<body style></body>
-</body>
+<body>
 <?php
 if (!isset($_SESSION["login"])) {
   $_SESSION["login"] = false;
@@ -26,17 +18,30 @@ if (!isset($_SESSION["admin"])) {
 
 
 <?php include '../utils/navbar.php'; ?>
-
-<div class="container" style="margin-bottom: 100px;">
-  <div class=überschrift class="container-xxl">
-    <h1>
-      Hotel Sommertraum - Startseite
-    </h1>
-    <h3>
-      Willkommen auf der Startseite des Hotel Sommertraum!
-    </h3>
-  </div>
-</div>
+<?php
+$page = (isset($_GET['page'])) ? $_GET['page'] : "landing";
+    $pages = [
+      "landebahn" => "seiten/landebahn.php",
+      "account" => "seiten/account.php",
+      "buchung" => "seiten/buchung.php",
+      "faqs" => "seiten/faqs.php",
+      "impressum" => "seiten/impressum.php",
+      "kontakt" => "seiten/kontakt.php",
+      "login-formular" => "seiten/login-formular.php",
+      "news" => "seiten/news.php",
+      "newsupload" => "seiten/newsupload.php",
+      "registrierungsformular" => "seiten/regristrierungsformular.php",
+      "reservierung" => "seiten/reservierung.php",
+      "reservierungen" => "seiten/reservierungen.php",
+      //TODO: Seiten hinzugefügen
+    ];
+    if (isset($pages[$page])) {
+      if (file_exists($pages[$page])) {
+          include $pages[$page];
+      }
+  } else {
+      include "seiten/404.php";
+  } ?>
 
 <?php include '../utils/footer.php'; ?>
 
