@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (emailExists($conn, $_POST["email"])) {
       header("Location: index.php?page=registrierungsformular&error=emailExists");
     } else {
-      if ($_POST["gender"] == "Herr") {
+      if ($_POST["anrede"] == "Herr") {
         $dbgender = "H";
       } else {
         $dbgender = "F";
@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $birthdate = date("Y-m-d", strtotime($birth));
 
       // Insert the data into the database
-      $sql = "INSERT INTO users (email, password, role, firstname, lastname, anrede, birthdate) VALUES (?, ?, ?, ?, ?, ?, ?);";
+      $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
       // Execute the statement
       $stmt = mysqli_stmt_init($conn);
@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
       $role = "user";
       $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-      mysqli_stmt_bind_param($stmt, "sssssss", $email, $hashedPassword, $user, $firstname, $lastname, $anrede, $date);
+      mysqli_stmt_bind_param($stmt, "sssssss", $email, $hashedPassword, $role, $firstname, $lastname, $dbgender, $birthdate);
       mysqli_stmt_execute($stmt);
       mysqli_stmt_close($stmt);
       header("Location: index.php?page=registrierungsformular&error=none");
@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       Zum Login
     </a>
   </p>
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=registrierungsformular"; ?>">
     <div class="container">
       <div class="mb-3">
         <div class="form-check">
