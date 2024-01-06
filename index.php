@@ -30,7 +30,7 @@ session_start();
     "faqs" => "seiten/faqs.php",
     "impressum" => "seiten/impressum.php",
     "kontakt" => "seiten/kontakt.php",
-    "login-formular" => "seiten/login-formular.php",
+    "loginformular" => "seiten/loginformular.php",
     "news" => "seiten/news.php",
     "newsupload" => "seiten/newsupload.php",
     "registrierungsformular" => "seiten/registrierungsformular.php",

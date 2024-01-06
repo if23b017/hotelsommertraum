@@ -1,3 +1,7 @@
+<?php
+require_once 'utils/dbaccess.php';
+?>
+
 <h1>Ihr Account</h1>
 
 <div class="container" style="margin-bottom: 100px;">

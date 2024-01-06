@@ -2,7 +2,8 @@
     <h1>
         News-Upload
     </h1>
-    <form action=" upload.php" method="post" enctype="multipart/form-data">
+    <?php //FIXME: uploadFormular richtig umleiten?>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
         <div class="cointainer">
             <div class="d-grid gap-4 col-4 mx-auto">
                 <div class="mb-3">

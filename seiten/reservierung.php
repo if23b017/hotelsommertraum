@@ -89,8 +89,12 @@
                     echo '<div class="alert alert-success" role="alert">Deine Reise vom ' . $arrival . ' bis ' . $departure .
                         ' wurde mit folgenden Bemerkungen gebucht: Frühstück ' . $breakfast . ', Parkplatz ' . $parking .
                         ', Haustiere ' . $tiere . '</div>';
-                    echo '<a href="reservierungen.php"><h3>Meine Buchungen</h3></a>';
-                }
+                    //FIXME: auf richtige Seite umleiten
+                    ?>
+                        <a href="reservierungen.php">
+                            <h3>Meine Buchungen</h3>
+                        </a>
+                <?php }
             }
 
             function test_input($data)

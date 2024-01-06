@@ -1,3 +1,8 @@
+<?php
+require_once 'utils/dbaccess.php';
+?>
+
+
 <div class="container" style="margin-bottom: 100px;">
 
   <h1>
@@ -72,18 +77,20 @@
               if ($row['type'] == 'admin') {
                 $_SESSION['admin'] = true;
                 setcookie("admin", true, time() + (86400 * 30), "/");
-                header("Location: index.php?page=landingNtf&error=noneLogin");
+                header("Location: index.php?page=landing&error=noneLogin");
               } else {
-                header("Location: index.php?page=landingNtf&error=noneLogin");
+                header("Location: index.php?page=landing&error=noneLogin");
               }
             } else {
-              header("Location: index.php?page=loginNtf&error=wrongPassword"); ?>
+              header("Location: index.php?page=landing&error=wrongPassword"); ?>
             <?php }
           } else {
-            header("Location: index.php?page=loginNtf&error=notActive");
+
+            header("Location: index.php?page=landing&error=notActive");
           }
         } else {
-          header("Location: index.php?page=loginNtf&error=wrongEmail");
+
+          header("Location: index.php?page=landing&error=wrongEmail");
         }
       }
     }

@@ -3,8 +3,8 @@
     <h1>
       Hotel Sommertraum - Startseite
     </h1>
-    <h2>
+    <h3>
       Willkommen auf der Startseite des Hotel Sommertraum!
-    </h2>
+    </h3>
   </div>
 </div>
