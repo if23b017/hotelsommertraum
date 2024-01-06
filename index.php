@@ -4,9 +4,10 @@ session_start();
 <!DOCTYPE html>
 <html lang="de">
 
-<?php include '../utils/head.php'; ?>
+<?php include 'utils/head.php'; ?>
 
 <body>
+
 <?php
 if (!isset($_SESSION["login"])) {
   $_SESSION["login"] = false;
@@ -17,7 +18,10 @@ if (!isset($_SESSION["admin"])) {
 ?>
 
 
-<?php include '../utils/navbar.php'; ?>
+<?php include 'utils/navbar.php'; ?>
+
+<h1>Hotel Sommertraum</h1>
+
 <?php
 $page = (isset($_GET['page'])) ? $_GET['page'] : "landing";
     $pages = [
@@ -40,10 +44,10 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : "landing";
           include $pages[$page];
       }
   } else {
-      include "seiten/404.php";
+      include "utils/404.php";
   } ?>
 
-<?php include '../utils/footer.php'; ?>
+<?php include 'utils/footer.php'; ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
