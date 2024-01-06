@@ -9,7 +9,13 @@ require_once 'utils/dbaccess.php';
     Login
   </h1>
 
-  <?php
+  
+  <?php //TODO: error handling
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "noneRegister") { ?>
+      <h3>Erfolgreich registriert. Bitte Einloggen</h3>
+    <?php }
+  }
   $email = $password = "";
   $emailErr = $passwordErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -77,6 +83,7 @@ require_once 'utils/dbaccess.php';
               if ($row['type'] == 'admin') {
                 $_SESSION['admin'] = true;
                 setcookie("admin", true, time() + (86400 * 30), "/");
+                //TODO: header locations
                 header("Location: index.php?page=landing&error=noneLogin");
               } else {
                 header("Location: index.php?page=landing&error=noneLogin");

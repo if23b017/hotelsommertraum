@@ -3,6 +3,7 @@
 
 <?php
 
+
 function test_input($data)
 {
   $data = trim($data);
@@ -128,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       mysqli_stmt_bind_param($stmt, "sssssss", $email, $hashedPassword, $role, $firstname, $lastname, $dbgender, $birthdate);
       mysqli_stmt_execute($stmt);
       mysqli_stmt_close($stmt);
-      header("Location: index.php?page=registrierungsformular&error=none");
+      header("Location: index.php?page=loginformular&error=noneRegister");
       exit();
     }
   }
@@ -303,3 +304,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </form>
 </div>
+
+<?php
+if (isset($_GET["error"])) {
+  if ($_GET["error"] == "emailExists") { ?>
+    <h3 style="color: red;">Diese Email ist bereits registriert!</h3>
+  <?php } else if ($_GET["error"] == "sqlerror") { ?>
+      <h3 style="color: red;">Etwas ist schief gelaufen!</h3>
+  <?php }
+}
