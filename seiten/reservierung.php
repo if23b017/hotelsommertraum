@@ -43,6 +43,7 @@
             <br>
 
             <?php
+            //TODO: zeitliche Verfügbarkeit checken und Preis berechnen, sowie Reservierungsdatum speichern
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $arr = $dep = $arrival = $departure = $breakfast = $parking = $tiere = "";
                 if (isset($_POST["arrival"])) {
@@ -71,11 +72,14 @@
                 } else {
                     $tiere = "nicht inklusiv";
                 }
-                $_SESSION['arrival'] = $arrival;
-                $_SESSION['departure'] = $departure;
-                $_SESSION['breakfast'] = $breakfast;
-                $_SESSION['parking'] = $parking;
-                $_SESSION['tiere'] = $tiere;
+                //TODO: Daten in Datenbank speichern
+                $sql = "INSERT INTO /* Reservierungstabell */ (/* room, arrivalDate, ... */) VALUES (/* ?, ?, ... */)";
+                $stmt = mysqli_stmt_init($conn);
+
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    /* Fehlermeldung */
+                }
+                /* Parameter an das Statement binden */
             }
             if (isset($departure) && isset($arrival)) {
 
