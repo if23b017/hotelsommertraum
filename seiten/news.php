@@ -1,3 +1,18 @@
+<?php 
+$sql = "SELECT * FROM /* NewsTabelle */";
+$stmt = mysqli_stmt_init($conn);
+if (!mysqli_stmt_prepare($stmt, $sql)) {
+    /*Fehlermeldung*/
+}
+mysqli_stmt_execute($stmt);
+
+/* Überprüfung ob zumindest eine News in der Datenbank ist */
+
+/* alle News ausgeben mithilfe einer while Schleife ausgeben */
+
+
+?>
+
 <div style="margin-bottom: 100px;">
 
     <h1>News</h1>

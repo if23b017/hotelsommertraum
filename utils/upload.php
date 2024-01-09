@@ -36,11 +36,13 @@
         } else {
             if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
                 echo "Die Datei " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " wurde erfolgreich hochgeladen.";
-                $_SESSION["text"] = $_POST["text"];
-                $_SESSION["title"] = $_POST["title"];
-                $timestamp = time();
-                $_SESSION["newsdate"] = date("d.m.Y", $timestamp);
-                $_SESSION["fileToUpload"] = $_FILES["fileToUpload"]["name"];
+                //TODO: Daten in die Datenbank schreiben
+                $sql = "INSERT INTO /* Newstabelle */ (/* Titel, Text , ... */) VALUES (/* ?, ?, ... */);";
+                $stmt = mysqli_stmt_init($conn);
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    /* Fehlermeldung */
+                }
+                /* Parameter an die Statement Binden */
             } else {
                 echo "Fehler beim hochladen der Datei.";
             }

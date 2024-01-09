@@ -184,8 +184,8 @@ require_once 'utils/dbaccess.php';
                 </span>
             </div>
         </div>
+    </form>
 </div>
-</form>
 
 
 <div class="container col-5" style="margin-bottom: 150px;">
