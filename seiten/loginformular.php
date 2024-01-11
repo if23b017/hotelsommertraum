@@ -3,6 +3,7 @@ require_once 'utils/dbaccess.php';
 ?>
 
 
+
 <div class="container" style="margin-bottom: 100px;">
 
   <h1>
@@ -15,6 +16,7 @@ require_once 'utils/dbaccess.php';
     if ($_GET["error"] == "noneRegister") { ?>
       <h3>Erfolgreich registriert. Bitte Einloggen</h3>
     <?php }
+
   }
   $email = $password = "";
   $emailErr = $passwordErr = "";
