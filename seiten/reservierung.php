@@ -1,6 +1,11 @@
+<?php
+require_once 'utils/functions.php';
+require_once 'utils/dbaccess.php';
+?>
+
 <div class="container" style="margin-bottom: 100px;">
     <h1>Reservieren</h1>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=reservierung"; ?>">
         <div class="d-grid gap-3 col-4 mx-auto">
             <div class="mb-3">
                 <input type="text" id="disabledTextInput" class="form-control" value="<?php echo $_SESSION['zimmer'] ?>"
@@ -99,14 +104,6 @@
                             <h3>Meine Buchungen</h3>
                         </a>
                 <?php }
-            }
-
-            function test_input($data)
-            {
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
             }
             ?>
         </div>

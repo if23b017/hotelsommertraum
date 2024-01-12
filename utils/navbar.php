@@ -14,7 +14,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.php?page=logout">
+            <a class="nav-link" href="utils/logout.php">
               <h4>Logout</h4>
             </a>
           </li>
@@ -44,6 +44,16 @@
           <li class="nav-item">
             <a class="nav-link" href="index.php?page=newsupload">
               <h4>Upload</h4>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?page=userVerwaltung">
+              <h4>User</h4>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?page=reservierungsverwaltung">
+              <h4>Reservierungen</h4>
             </a>
           </li>
         <?php } ?>
