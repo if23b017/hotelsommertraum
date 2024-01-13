@@ -9,10 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-  <?php //TODO: error handling + divs
-
-
-
+<?php
   
   require_once 'utils/dbaccess.php';
   require_once 'utils/functions.php';
