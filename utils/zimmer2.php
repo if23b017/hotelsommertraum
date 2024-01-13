@@ -3,6 +3,6 @@ session_start();
 
 $_SESSION['zimmer'] = 'Luxussuite';
 
-header("Location: ../index.php?page=reservierung");
+header("Location: reservierung.php");
 exit();
 ?>

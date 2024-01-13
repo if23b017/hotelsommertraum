@@ -6,6 +6,6 @@ $_SESSION["registered"] = false;
 $_SESSION["admin"] = false;
 
 
-header("Location: ../index.php?page=landing&error=noneLogout");
+header("Location: index.php");
 exit();
 ?>

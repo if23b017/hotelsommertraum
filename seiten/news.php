@@ -1,5 +1,4 @@
-<?php
-require_once 'utils/dbaccess.php';
+<?php 
 $sql = "SELECT * FROM /* NewsTabelle */";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -23,25 +22,32 @@ mysqli_stmt_execute($stmt);
         <div class="text-center">
             <h2>
                 <?php
-                //Titel;
-                ?>
+                if (isset($_SESSION["title"])) {
+                    echo $_SESSION["title"];
+                } ?>
             </h2>
         </div>
         <div class="text-center">
             <?php
-            //TODO: Bild aus der Datenbank
-            echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
+            if (isset($_SESSION["fileToUpload"])) {
+                //TODO: Bild aus der Datenbank
+                echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
+            }
             ?>
         </div>
         <p style="text-align: justify;">
             <?php
-            //Text;
+            if (isset($_SESSION["text"])) {
+                echo $_SESSION["text"];
+            }
             ?>
         </p>
         <h2>
             <?php
-            echo "Hochgeladen am " //Newsdate;
-                ?>
+            if (isset($_SESSION["newsdate"])) {
+                echo "Hochgeladen am " . $_SESSION["newsdate"];
+            }
+            ?>
         </h2>
         <?php
 
