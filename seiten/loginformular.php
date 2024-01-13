@@ -7,8 +7,8 @@ if (session_status() == PHP_SESSION_NONE) {
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-  <?php //TODO: error handling + divs
-  
+  <?php
+
 
   require_once 'utils/dbaccess.php';
   require_once 'utils/functions.php';
@@ -96,7 +96,7 @@ if (isset($_GET["error"])) {
     <h3>Erfolgreich registriert. Bitte Einloggen</h3>
   <?php }
   if ($_GET["error"] == "wrongPassword") { ?>
-    <h3>Passwort Falsch</h3>
+    <h3>Passwort falsch</h3>
   <?php }
   if ($_GET["error"] == "wrongEmail") { ?>
     <h3>E-Mail-Adresse nicht gefunden</h3>

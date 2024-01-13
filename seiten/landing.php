@@ -8,3 +8,15 @@
     </h3>
   </div>
 </div>
+<?php
+if (isset($_GET["error"])) {
+  if ($_GET["error"] == "noneLogin") { ?>
+    <h3 style="color: green">Herzlich Willkommen
+      <?php
+      //TODO: maybe Daten aus Datenbank holen und echoen
+      echo strstr($_COOKIE["email"], "@", true); ?>
+    </h3>
+    <?php
+  }
+}
+?>

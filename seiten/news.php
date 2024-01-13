@@ -1,4 +1,5 @@
 <?php
+//TODO: News aus Datenbank holen und anzeigen
 require_once 'utils/dbaccess.php';
 $sql = "SELECT * FROM /* NewsTabelle */";
 $stmt = mysqli_stmt_init($conn);
@@ -29,7 +30,6 @@ mysqli_stmt_execute($stmt);
         </div>
         <div class="text-center">
             <?php
-            //TODO: Bild aus der Datenbank
             echo '<img src="img/newsthumbnails/' . $_SESSION["fileToUpload"] . '" alt="Thumbnail" width="300" height="auto">';
             ?>
         </div>
