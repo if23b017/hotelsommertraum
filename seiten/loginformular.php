@@ -12,6 +12,23 @@ if (session_status() == PHP_SESSION_NONE) {
   require_once 'utils/dbaccess.php';
   require_once 'utils/functions.php';
 
+  //TODO: error handling + divs
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "noneRegister") { ?>
+      <h3>Erfolgreich registriert. Bitte Einloggen</h3>
+    <?php }
+    if ($_GET["error"] == "wrongPassword") { ?>
+      <h3>Passwort Falsch</h3>
+    <?php }
+    if ($_GET["error"] == "wrongEmail") { ?>
+      <h3>E-Mail-Adresse nicht gefunden</h3>
+    <?php }
+  }
+  ?>
+
+
+  <?php
+
   $email = $password = "";
   $emailErr = $passwordErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,9 +74,10 @@ if (session_status() == PHP_SESSION_NONE) {
   }
   ?>
 
+  <!-- TODO: HTML CODE fixen -->
 
-  <?php //TODO: HTML CODE fixen ?>
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=loginformular"; ?>">
+
+  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "page?=loginformular"; ?>">
     <div class="container margin-bottom 100px">
       <div class="d-grid gap-4 col-5 mx-auto">
         <div class="mb-3">
