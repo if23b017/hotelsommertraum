@@ -1,5 +1,14 @@
 <?php
+if (!isset($_COOKIE["email"])) {
+    header("Location: index.php?page=landing&error=notloggedin");
+    exit();
+}
+?>
+
+
+<?php
 require_once 'utils/dbaccess.php';
+require_once 'utils/functions.php';
 ?>
 
 <h1>Ihr Account</h1>
@@ -7,103 +16,140 @@ require_once 'utils/dbaccess.php';
 <div class="container" style="margin-bottom: 100px;">
 
     <?php
-    $firstname = $lastname = $email = $date = $password = "";
+    $firstname = $lastname = $email = $date = $password = $newPassword = "";
     $passwordErr = $passwordErrident = $newPasswordErr = $passwordErrLength =
         $passwordErrNumber = $passwordErrBig = $passwordErrLow = $wrongOldPassword = "";
-    if (isset($_SESSION["firstname"])) {
-        $firstname = test_input($_SESSION["firstname"]);
-    } else {
-        $firstname = "Max";
+
+    $sql = "SELECT * FROM users WHERE email = '" . $_COOKIE["email"] . "'";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: index.php?page=landing&error=stmtFailed");
+        exit();
     }
-    if (isset($_SESSION["lastname"])) {
-        $lastname = test_input($_SESSION["lastname"]);
-    } else {
-        $lastname = "Mustermann";
-    }
-    if (isset($_SESSION["email"])) {
-        $email = test_input($_SESSION["email"]);
-    } else {
-        $email = "max.mustermann@gmail.com";
-    }
-    if (isset($_SESSION["date"])) {
-        $date = test_input($_SESSION["date"]);
-    } else {
-        $date = "1999-12-31";
-    }
-    $newDate = date("Y-m-d", strtotime($date));
+    mysqli_stmt_execute($stmt);
+
+    $resultData = mysqli_stmt_get_result($stmt);
+
+    $row = mysqli_fetch_assoc($resultData);
+    $firstname = test_input($row["firstname"]);
+    $lastname = test_input($row["lastname"]);
+    $email = test_input($row["email"]);
+    $date = test_input($row["birthdate"]);
+    $birthDate = date("Y-m-d", strtotime($date));
+
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["firstname"])) {
-            $firstname = test_input($_POST["firstname"]);
-        }
-        if (isset($_POST["lastname"])) {
-            $lastname = test_input($_POST["lastname"]);
-        }
-        if (isset($_POST["email"])) {
-            $email = test_input($_POST["email"]);
-        }
-        if (isset($_POST["date"])) {
-            $date = test_input($_POST["date"]);
-        }
+        if (isset($_POST["form"])) {
+            if ($_POST["form"] == "profile") {
+                // Validate and update profile data
+                if (isset($_POST["firstname"])) {
+                    $firstname = test_input($_POST["firstname"]);
+                }
+                if (isset($_POST["lastname"])) {
+                    $lastname = test_input($_POST["lastname"]);
+                }
+                if (isset($_POST["email"])) {
+                    $email = test_input($_POST["email"]);
+                }
+                if (isset($_POST["date"])) {
+                    $date = test_input($_POST["date"]);
+                }
 
-        $newDate = date("Y-m-d", strtotime($date));
-        $_SESSION["firstname"] = $firstname;
-        $_SESSION["lastname"] = $lastname;
-        $_SESSION["email"] = $email;
-        $_SESSION["date"] = $date;
+                $birthDate = date("Y-m-d", strtotime($date));
+                $_SESSION["firstname"] = $firstname;
+                $_SESSION["lastname"] = $lastname;
+                $_SESSION["email"] = $email;
+                $_SESSION["date"] = $date;
 
-        //neues Passwort und dazu Validierung
-        if (isset($_POST["newPassword"])) {
-            $password = test_input($_POST["newPassword"]);
-        }
-        if (empty($_POST["oldPassword"]) || empty($_POST["newPassword"]) || empty($_POST["newPassword2"])) {
-            $passwordErr = "*Passwort erforderlich";
-        }
-        //error bei Email Änderung im Profil
-        if (strlen($_POST["newPassword"]) < 8) {
-            $passwordErrLength = "*Passwort muss mindestens 8 Zeichen lang sein";
-        }
-        if (!preg_match("#[0-9]+#", $password)) {
-            $passwordErrNumber = "*Passwort muss mindestens eine Zahl enthalten";
-        }
-        if (!preg_match("#[A-Z]+#", $password)) {
-            $passwordErrBig = "*Passwort muss mindestens einen Großbuchstaben enthalten";
-        }
-        if (!preg_match("#[a-z]+#", $password)) {
-            $passwordErrLow = "*Passwort muss mindestens einen Kleinbuchstaben enthalten";
-        }
-        if (isset($_POST["newPassword"])) {
-            if ($_POST["newPassword"] != $_POST["newPassword2"]) {
-                $passwordErrident = "Passwörter sind nicht ident!";
+                $sql = "UPDATE users SET firstname = ? , lastname = ? , email = ?, birthdate = ? WHERE email = ?";
+                $stmt = mysqli_stmt_init($conn);
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    header("Location: index.php?page=landing&error=stmtFailed");
+                    exit();
+                }
+                mysqli_stmt_bind_param($stmt, "sssss", $firstname, $lastname, $email, $birthDate, $_COOKIE["email"]);
+                mysqli_stmt_execute($stmt);
+
+
+            } elseif ($_POST["form"] == "password") {
+
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    if (isset($_POST["form"])) {
+                        if ($_POST["form"] == "password") {
+                            if (empty($_POST["oldPassword"]) || empty($_POST["newPassword"]) || empty($_POST["newPassword2"])) {
+                                $passwordErr = "*Alle Felder müssen ausgefüllt werden";
+                            } else {
+                                $oldPassword = $_POST["oldPassword"];
+                                $hashedPassword = $row["password"]; // Fetch the hashed password from the database
+    
+                                if (password_verify($oldPassword, $hashedPassword) && $_POST["newPassword"] == $_POST["newPassword2"]) {
+                                    $newPassword = password_hash($_POST["newPassword"], PASSWORD_DEFAULT);
+                                    $sql = "UPDATE users SET password = ? WHERE email = ?";
+                                    $stmt = mysqli_stmt_init($conn);
+                                    if (!mysqli_stmt_prepare($stmt, $sql)) {
+                                        header("Location: index.php?page=landing&error=stmtFailed");
+                                        exit();
+                                    }
+                                    mysqli_stmt_bind_param($stmt, "ss", $newPassword, $_COOKIE["email"]);
+                                    mysqli_stmt_execute($stmt);
+                                    echo '<div class="alert alert-success" role="alert" style="width: 50%; margin: 0 auto; margin-bottom: 20px";>
+                                            Passwort erfolgreich geändert!
+                                            </div>';
+                                }
+
+
+                                //neues Passwort und dazu Validierung
+                                if (isset($_POST["newPassword"])) {
+                                    $password = test_input($_POST["newPassword"]);
+                                }
+                                if (empty($_POST["oldPassword"]) || empty($_POST["newPassword"]) || empty($_POST["newPassword2"])) {
+                                    $passwordErr = "*Passwort erforderlich";
+                                }
+                                if (strlen($_POST["newPassword"]) < 8) {
+                                    $passwordErrLength = "*Passwort muss mindestens 8 Zeichen lang sein";
+                                }
+                                if (!preg_match("#[0-9]+#", $password)) {
+                                    $passwordErrNumber = "*Passwort muss mindestens eine Zahl enthalten";
+                                }
+                                if (!preg_match("#[A-Z]+#", $password)) {
+                                    $passwordErrBig = "*Passwort muss mindestens einen Großbuchstaben enthalten";
+                                }
+                                if (!preg_match("#[a-z]+#", $password)) {
+                                    $passwordErrLow = "*Passwort muss mindestens einen Kleinbuchstaben enthalten";
+                                }
+                                if (isset($_POST["newPassword"])) {
+                                    if ($_POST["newPassword"] != $_POST["newPassword2"]) {
+                                        $passwordErrident = "*Passwörter sind nicht ident!";
+                                    }
+                                }
+                                if (isset($_POST["oldPassword"])) {
+                                    $oldPassword = $_POST["oldPassword"];
+                                    $hashedPassword = $row["password"]; // Fetch the hashed password from the database
+    
+                                    if (!password_verify($oldPassword, $hashedPassword)) {
+                                        $wrongOldPassword = "*Altes Passwort ist falsch!";
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
             }
         }
-        if (isset($_POST["oldPassword"])) {
-            if ($_POST["oldPassword"] != $_SESSION["password"]) {
-                $wrongOldPassword = "Altes Passwort ist falsch!";
-            }
-        }
-    }
-
-    function test_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
     }
     ?>
 
-
     <div class="mb-3">
         <div class="d-grid gap-4 col-5 mx-auto">
-            <a class="btn btn-primary" role="button" href="reservierungen.php">Meine Reservierungen</a>
+            <a class="btn btn-primary" role="button" href="index.php?page=reservierungen">Meine Reservierungen</a>
         </div>
     </div>
 
-
     <br>
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=account" ?>">
+        <input type="hidden" name="form" value="profile">
         <div class="container">
             <div class="d-grid gap-3 col-5 mx-auto">
                 <input type="text" class="form-control" name="firstname" placeholder="Vorname" tabindex="1"
@@ -112,22 +158,25 @@ require_once 'utils/dbaccess.php';
                     value="<?php echo $lastname; ?>">
                 <input type="text" class="form-control" name="email" placeholder="E-Mail-Adresse" tabindex="3"
                     value="<?php echo $email; ?>">
-                <input type="date" class="form-control" name="date" tabindex="4" value="<?php echo $newDate; ?>">
+                <input type="date" class="form-control" name="date" tabindex="4" value="<?php echo $birthDate; ?>">
                 <div class="mb-3">
                     <div class="d-grid gap-4 col-5 mx-auto">
                         <input class="btn btn-primary" type="submit" value="Änderungen übernehmen" tabindex="5">
                     </div>
                 </div>
                 <br>
-                <h3>
-                    Passwort ändern:
-                </h3>
+
             </div>
         </div>
     </form>
 
+    <h3>
+        Passwort ändern:
+    </h3>
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=account" ?>">
+        <input type="hidden" name="form" value="password">
         <div class="container">
             <div class="d-grid gap-4 col-5 mx-auto">
                 <input data-toggle="password" class="form-control" type="password" name="oldPassword"
@@ -185,23 +234,4 @@ require_once 'utils/dbaccess.php';
             </div>
         </div>
     </form>
-</div>
-
-
-<div class="container col-5" style="margin-bottom: 150px;">
-
-    <?php
-    if (isset($_POST["newPassword"])) {
-        if (
-            ($_POST["newPassword"] == $_POST["newPassword2"]) && ($_POST["oldPassword"] == $_SESSION["password"]) &&
-            ($passwordErr == "") && ($passwordErrident) == ""
-        ) {
-            $_SESSION["password"] = $_POST["newPassword"];
-            echo '<div class="alert alert-success" role="alert">
-                        Passwort erfolgreich geändert!
-                </div>';
-        }
-    }
-    ?>
-
 </div>
