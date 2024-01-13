@@ -12,7 +12,7 @@ function test_input($data)
   return $data;
 }
 
-function emailExists($conn, $email)
+function registerEmailExists($conn, $email)
 {
   $sql = "SELECT * FROM users WHERE email = ?;";
   $stmt = mysqli_stmt_init($conn);
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passwordErrLength == "" && $passwordErrNumber == "" && $passwordErrBig == "" && $passwordErrLow == "" && $anredeErr == "" &&
     $firstnameErr == "" && $lastnameErr == "" && $emailErr == "" && $passwordErr == "" && $passwordErr2 == "" && $dateErr == ""
   ) {
-    if (emailExists($conn, $_POST["email"])) {
+    if (registerEmailExists($conn, $_POST["email"])) {
       header("Location: index.php?page=registrierungsformular&error=emailExists");
     } else {
       if ($_POST["anrede"] == "Herr") {

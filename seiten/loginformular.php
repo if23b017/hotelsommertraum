@@ -1,15 +1,13 @@
 <?php
-require_once 'utils/dbaccess.php';
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 ?>
 
-
-
 <div class="container" style="margin-bottom: 100px;">
+  <h1>Login</h1>
 
-  <h1>
-    Login
-  </h1>
-
+  <?php //TODO: error handling + divs
   
   <?php //TODO: error handling + divs
   if (isset($_GET["error"])) {
@@ -113,15 +111,15 @@ function test_input($data)
     <div class="container margin-bottom 100px">
       <div class="d-grid gap-4 col-5 mx-auto">
         <div class="mb-3">
-          <input type="text" class="form-control" name="email" placeholder="E-Mail-Adresse" required>
+          <input type="text" class="form-control" name="email" placeholder="E-Mail-Adresse">
         </div>
       </div>
       <div class="d-grid gap-4 col-5 mx-auto">
         <div class="mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Passwort" required>
+          <input type="password" class="form-control" name="password" placeholder="Passwort">
         </div>
         <div class="d-grid gap-4 col-5 mx-auto">
-          <input class="btn btn-primary" type="submit" value="Login" tabindex="9">
+          <input class="btn btn-primary" type="submit" value="Login">
         </div>
       </div>
     </div>
