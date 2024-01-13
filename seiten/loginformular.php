@@ -7,27 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-<<<<<<< HEAD
   <?php //TODO: error handling + divs
-=======
-
-  
-  <?php //TODO: error handling + divs
-  if (isset($_GET["error"])) {
-    if ($_GET["error"] == "noneRegister") { ?>
-      <h3>Erfolgreich registriert. Bitte Einloggen</h3>
-    <?php }
-    if ($_GET["error"] == "wrongPassword") { ?>
-      <h3>Passwort Falsch</h3>
-    <?php }
-    if ($_GET["error"] == "wrongEmail") { ?>
-      <h3>E-Mail-Adresse nicht gefunden</h3>
-    <?php } }
-    ?>
-    
-
-<?php
->>>>>>> 50284421f4aaa1a0a2a7a7848986f3cf2ee5f785
   
 
   require_once 'utils/dbaccess.php';
@@ -76,29 +56,10 @@ if (session_status() == PHP_SESSION_NONE) {
         }
       }
     }
-    if (empty($_POST["password"])) {
-      $passwordErr = "Passwort ist erforderlich";
-    } else {
-      $password = test_input($_POST["password"]);
-    }
   }
-
-  if (empty($emailErr) && empty($passwordErr)) { 
-    loginUser($conn, $email, $password);
-  }
-
   ?>
 
-<<<<<<< HEAD
   <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=loginformular" ?>">
-=======
-
-
-<!-- TODO: HTML CODE fix -->
-  
-
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
->>>>>>> 50284421f4aaa1a0a2a7a7848986f3cf2ee5f785
     <div class="container margin-bottom 100px">
       <div class="d-grid gap-4 col-5 mx-auto">
         <div class="mb-3">
