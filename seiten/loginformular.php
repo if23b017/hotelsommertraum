@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-  <?php //TODO: error handling + divs
+
   
   <?php //TODO: error handling + divs
   if (isset($_GET["error"])) {
