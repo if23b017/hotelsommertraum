@@ -4,28 +4,38 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ?>
 
-
-
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-<?php
+  <?php //TODO: error handling + divs
   
+
   require_once 'utils/dbaccess.php';
   require_once 'utils/functions.php';
-
-
-
-
 
   $email = $password = "";
   $emailErr = $passwordErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["email"])) {
+      $emailErr = "E-Mail-Adresse ist erforderlich";
+    } else {
+      $email = test_input($_POST["email"]);
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailErr = "Ungültiges E-Mail-Format";
+      }
+    }
+    if (empty($_POST["password"])) {
+      $passwordErr = "Passwort ist erforderlich";
+    } else {
+      $password = test_input($_POST["password"]);
+    }
+  }
+
+
   if (empty($emailErr) && empty($passwordErr)) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $email = test_input($_POST["email"]);
       $password = test_input($_POST["password"]);
-
       if (!empty($email) && !empty($password)) {
         $userData = emailExists($conn, $email);
         if ($userData) {
@@ -49,9 +59,7 @@ if (session_status() == PHP_SESSION_NONE) {
   }
   ?>
 
-
-  <?php //TODO: HTML CODE fixen ?>
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=loginformular"; ?>">
+  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=loginformular" ?>">
     <div class="container margin-bottom 100px">
       <div class="d-grid gap-4 col-5 mx-auto">
         <div class="mb-3">
