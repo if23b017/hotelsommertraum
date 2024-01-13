@@ -1,11 +1,62 @@
+<?php include 'utils/head.php'; ?>
+
+<?php /*if ($_SESSION['role'] !== 'admin') {
+header("location: index.php?page=landing&error=notAdmin");
+exit();
+}*/?>
+
 <?php
-
-/*if ($_SESSION['role'] !== 'admin') {
-    header("location: index.php?page=landing&error=notAdmin");
-    exit();
-}*/
-
 require_once 'utils/dbaccess.php';
+?>
+
+<?php
+//TODO: User updaten
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userId = $_POST["userId"];
+    if ($_POST["gender"] == "Herr") {
+        $anrede = "H";
+    } else {
+        $anrede = "F";
+    }
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
+    $date = $_POST["birthdate"];
+    $email = $_POST["email"];
+    $role = $_POST["role"];
+
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $userId = $_POST["userId"];
+        if ($_POST["gender"] == "Herr") {
+            $anrede = "H";
+        } else {
+            $anrede = "F";
+        }
+        $firstname = $_POST["firstname"];
+        $lastname = $_POST["lastname"];
+        $date = $_POST["birthdate"];
+        $email = $_POST["email"];
+        $role = $_POST["role"];
+
+        $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ? WHERE userId = ?";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: index.php?page=landing&error=stmtfailed");
+            exit();
+            /* Fehlermeldung */
+        }
+
+        mysqli_stmt_bind_param($stmt, "ssssssi", $anrede, $firstname, $lastname, $date, $email, $role, $userId);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+    }
+}
+/* Parameter an das Statement binden */
+?>
+
+<?php
 
 $sql = "SELECT * FROM users;";
 $stmt = mysqli_stmt_init($conn);
@@ -21,7 +72,8 @@ $result = mysqli_stmt_get_result($stmt);
 
 if ($result->num_rows > 0) {
     ?>
-    <div class="login-box d-flex justify-content-center align-items-center" style="width: 90%; max-width: 42rem;">
+    <div class="login-box d-flex justify-content-center align-items-center"
+        style="width: 100%; display: flex; justify-content: center; align-items: center; margin-bottom: 100px;">
         <div style="text-align: center;">
             <h1>User</h1>
             <?php
@@ -42,29 +94,50 @@ if ($result->num_rows > 0) {
                 ?>
                 <div class="user-info">
                     <form method="post" id="user-form"
-                        action=" <?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?page=userVerwaltung"); ?>">
+                        action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?page=userVerwaltung"); ?>">
                         <input type="hidden" name="userId" value="<?php echo $userId; ?>">
-                        <label for="gender">Geschlecht:</label>
-                        <input type="text" name="gender" value="<?php echo $anrede; ?>"><br>
-
-                        <label for="firstname">Vorname:</label>
-                        <input type="text" name="firstname" value="<?php echo $firstname; ?>"><br>
-
-                        <label for="lastname">Nachname:</label>
-                        <input type="text" name="lastname" value="<?php echo $lastname; ?>"><br>
-
-                        <label for="birthdate">Geburtsdatum:</label>
-                        <input type="text" name="birthdate" value="<?php echo $date; ?>"><br>
-
-                        <label for="email">Email:</label>
-                        <input type="text" name="email" value="<?php echo $email; ?>"><br>
-
-                        <label for="role">Benutzertyp:</label>
-                        <input type="text" name="role" value="<?php echo $role; ?>"><br>
-
-                        <input type="submit" value="Aktualisieren">
+                        <div class="user-info-row">
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="gender" style="display: inline-block; width: 150px;">Geschlecht:</label>
+                                <select name="gender" style="width: 225px;">
+                                    <option value="Herr" <?php if ($anrede == "Herr")
+                                        echo "selected"; ?>>Herr</option>
+                                    <option value="Frau" <?php if ($anrede == "Frau")
+                                        echo "selected"; ?>>Frau</option>
+                                </select>
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="firstname" style="display: inline-block; width: 150px;">Vorname:</label>
+                                <input type="text" name="firstname" value="<?php echo $firstname; ?>" style="width: 225px;">
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="lastname" style="display: inline-block; width: 150px;">Nachname:</label>
+                                <input type="text" name="lastname" value="<?php echo $lastname; ?>" style="width: 225px;">
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="birthdate" style="display: inline-block; width: 150px;">Geburtsdatum:</label>
+                                <input type="date" name="birthdate" value="<?php echo $date; ?>" style="width: 225px;">
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="email" style="display: inline-block; width: 150px;">Email:</label>
+                                <input type="email" name="email" value="<?php echo $email; ?>" style="width: 225px;">
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="role" style="display: inline-block; width: 150px;">Benutzertyp:</label>
+                                <select name="role" style="width: 225px;">
+                                    <option value="user" <?php if ($role == "user")
+                                        echo "selected"; ?>>User</option>
+                                    <option value="admin" <?php if ($role == "admin")
+                                        echo "selected"; ?>>Admin</option>
+                                </select>
+                            </div>
+                            <div class="user-info-column" style="margin: 20px;">
+                                <input type="submit" value="Aktualisieren" style="width: 225px;">
+                            </div>
+                        </div>
                     </form>
                 </div>
+                <br>
                 <?php
             }
             ?>
@@ -75,55 +148,4 @@ if ($result->num_rows > 0) {
     echo "Keine Benutzer gefunden.";
 }
 mysqli_stmt_close($stmt);
-?>
-
-
-<?php
-//TODO: User updaten
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = $_POST["userId"];
-    if ($_POST["gender"] == "Herr") {
-        $anrede = "M";
-    } else {
-        $anrede = "W";
-    }
-    $firstname = $_POST["firstname"];
-    $lastname = $_POST["lastname"];
-    $date = $_POST["birthdate"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $role = $_POST["role"];
-
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $userId = $_POST["userId"];
-        if ($_POST["gender"] == "Herr") {
-            $anrede = "M";
-        } else {
-            $anrede = "W";
-        }
-        $firstname = $_POST["firstname"];
-        $lastname = $_POST["lastname"];
-        $date = $_POST["birthdate"];
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
-        $role = $_POST["role"];
-
-        $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, password = ?, role = ? WHERE userId = ?";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: index.php?page=landing&error=stmtfailed");
-            exit();
-            /* Fehlermeldung */
-        }
-
-        mysqli_stmt_bind_param($stmt, "sssssssi", $anrede, $firstname, $lastname, $date, $email, $hashedPassword, $role, $userId);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-    }
-}
-/* Parameter an das Statement binden */
 ?>
