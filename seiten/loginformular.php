@@ -7,7 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
-
   
   <?php //TODO: error handling + divs
   if (isset($_GET["error"])) {
@@ -104,7 +103,7 @@ function test_input($data)
 
 
 
-<!-- TODO: HTML CODE fixen -->
+<!-- TODO: HTML CODE fix -->
   
 
   <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
