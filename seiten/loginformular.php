@@ -4,8 +4,11 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ?>
 
+
+
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
+
 
   
   <?php //TODO: error handling + divs
@@ -23,69 +26,40 @@ if (session_status() == PHP_SESSION_NONE) {
     
 
 <?php
-
-function test_input($data)
-  {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-  }
-
-  function emailExists($conn, $email)
-  {
-    $sql = "SELECT * FROM users WHERE email = ?;";
-    $stmt = mysqli_stmt_init($conn);
-
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-      header("location: index.php?page=landing&error=stmtfailed");
-      exit();
-  }
-
-    mysqli_stmt_bind_param($stmt, "s", $email);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_assoc($result);
-  }
-
-  function loginUser($conn, $email, $password)
-  {
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          $email = test_input($_POST["email"]);
-          $password = test_input($_POST["password"]);
   
-          if (!empty($email) && !empty($password)) {
-              $userData = emailExists($conn, $email);
-  
-              if ($userData && password_verify($password, $userData['password'])) {
-                  $_SESSION['login'] = true;
-                  setcookie("email", $_POST["email"], time() + (86400 * 30), "/");
-  
-                  if ($userData['role'] == 'admin') {
-                      $_SESSION['admin'] = true;
-                      header("Location: index.php?page=landing&error=noneAdminLogin");
-                  } else {
-                      header("Location: index.php?page=landing&error=noneLogin");
-                  }
-              } else {
-                  header("Location: index.php?page=landing&error=wrongPassword");
-              }
-          } else {
-              header("Location: index.php?page=landing&error=wrongEmail");
-          }
-      }
-  }
+  require_once 'utils/dbaccess.php';
+  require_once 'utils/functions.php';
+
+
+
 
 
   $email = $password = "";
   $emailErr = $passwordErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST["email"])) {
-      $emailErr = "E-Mail-Adresse ist erforderlich";
-    } else {
+  if (empty($emailErr) && empty($passwordErr)) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $email = test_input($_POST["email"]);
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Ungültiges E-Mail-Format";
+      $password = test_input($_POST["password"]);
+
+      if (!empty($email) && !empty($password)) {
+        $userData = emailExists($conn, $email);
+        if ($userData) {
+          if (password_verify($password, $userData['password'])) {
+            $_SESSION['login'] = true;
+            setcookie("email", $_POST["email"], time() + (86400 * 30), "/");
+            if ($userData['role'] == 'admin') {
+              $_SESSION['admin'] = true;
+              header("Location: index.php?page=landing&error=noneAdminLogin");
+            } else {
+              header("Location: index.php?page=landing&error=noneLogin");
+            }
+          } else {
+            header("Location: index.php?page=loginformular&error=wrongPassword");
+          }
+        } else {
+          header("Location: index.php?page=loginformular&error=wrongEmail");
+        }
       }
     }
     if (empty($_POST["password"])) {
@@ -123,5 +97,30 @@ function test_input($data)
       </div>
     </div>
   </form>
-  <br>
 </div>
+
+<?php
+if (!empty($emailErr)) { ?>
+  <h3>
+    <?php echo $emailErr ?>
+  </h3>
+<?php }
+
+if (!empty($passwordErr)) { ?>
+  <h3>
+    <?php echo $passwordErr ?>
+  </h3>
+<?php }
+
+if (isset($_GET["error"])) {
+  if ($_GET["error"] == "noneRegister") { ?>
+    <h3>Erfolgreich registriert. Bitte Einloggen</h3>
+  <?php }
+  if ($_GET["error"] == "wrongPassword") { ?>
+    <h3>Passwort Falsch</h3>
+  <?php }
+  if ($_GET["error"] == "wrongEmail") { ?>
+    <h3>E-Mail-Adresse nicht gefunden</h3>
+  <?php }
+}
+?>
