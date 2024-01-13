@@ -149,4 +149,3 @@ if ($result->num_rows > 0) {
 }
 mysqli_stmt_close($stmt);
 ?>
-bruh
