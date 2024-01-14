@@ -23,13 +23,15 @@ if (mysqli_num_rows($result) > 0) {
                     </h2>
                 </div>
                 <div class="text-center">
-                    <img src="img/newsthumbnails/<?php echo $row['thumbnail']; ?>" alt="Thumbnail" width="300" height="auto">
+                    <img src="<?php echo $row['thumbnail']; ?>" alt="Thumbnail" width="300" height="auto">
                 </div>
                 <p style="text-align: justify;">
                     <?php echo $row['newstext']; ?>
                 </p>
                 <h2>
-                    <?php echo "Hochgeladen am " . $row['newsdate']; ?>
+                    <?php 
+                    $newsdate = date("d.m.Y", strtotime($row["newsdate"]));
+                    echo "Hochgeladen am " . $newsdate; ?>
                 </h2>
             </div>
         </div>
