@@ -3,9 +3,11 @@ require_once 'dbaccess.php';
 ?>
 <?php
 
+//TODO: Error handling - headers
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $uploadOk = 0;
-    $target_dir = "../img/newsthumbnails/";
+    $target_dir = "../uploads/news/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);

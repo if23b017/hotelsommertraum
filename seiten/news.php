@@ -22,6 +22,8 @@ if (mysqli_num_rows($result) > 0) {
                         <?php echo $row['title']; ?>
                     </h2>
                 </div>
+                <?php //TODO: Bilder serverseitig verkleinern ?>
+                
                 <div class="text-center">
                     <img src="<?php echo $row['thumbnail']; ?>" alt="Thumbnail" width="300" height="auto">
                 </div>
