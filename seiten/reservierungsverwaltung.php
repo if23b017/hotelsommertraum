@@ -194,9 +194,10 @@ if ($result->num_rows > 0) {
                     <div class="reservation-form" style="margin-bottom: 10px;">
                         <label for="breakfast" style="display: inline-block; width: 150px;">Frühstück:</label>
                         <select name="breakfast" style="width: 225px;">
-                            <option value="inkludiert" <?php if ($breakfast == "1")
-                                echo "selected"; ?>>inkludiert</option>
-                            <option value="nicht inkludiert" <?php if ($breakfast == "0")
+                            <option value="inkludiert" <?php if ($breakfast == "inkludiert")
+                                echo "selected"; ?>>inkludiert
+                            </option>
+                            <option value="nicht inkludiert" <?php if ($breakfast == "nicht inkludiert")
                                 echo "selected"; ?>>nicht
                                 inkludiert</option>
                         </select>
@@ -204,19 +205,20 @@ if ($result->num_rows > 0) {
                     <div class="reservation-form" style="margin-bottom: 10px;">
                         <label for="parking" style="display: inline-block; width: 150px;">Parkplatz:</label>
                         <select name="parking" style="width: 225px;">
-                            <option value="inkludiert" <?php if ($parking == "1")
+                            <option value="inkludiert" <?php if ($parking == "inkludiert")
                                 echo "selected"; ?>>inkludiert</option>
-                            <option value="nicht inkludiert" <?php if ($parking == "0")
-                                echo "selected"; ?>>nicht inkludiert
+                            <option value="nicht inkludiert" <?php if ($parking == "nicht inkludiert")
+                                echo "selected"; ?>>nicht
+                                inkludiert
                             </option>
                         </select>
                     </div>
                     <div class="reservation-form" style="margin-bottom: 10px;">
                         <label for="pets" style="display: inline-block; width: 150px;">Haustiere:</label>
                         <select name="pets" style="width: 225px;">
-                            <option value="inkludiert" <?php if ($pets == "1")
+                            <option value="inkludiert" <?php if ($pets == "inkludiert")
                                 echo "selected"; ?>>inkludiert</option>
-                            <option value="nicht inkludiert" <?php if ($pets == "0")
+                            <option value="nicht inkludiert" <?php if ($pets == "nicht inkludiert")
                                 echo "selected"; ?>>nicht
                                 inkludiert</option>
                         </select>
@@ -242,6 +244,6 @@ if ($result->num_rows > 0) {
         $number++;
     }
 } else {
-    echo "Es gibt noch keine Reservierungen!";
+    echo '<h3 class="text-center">Es gibt noch keine Reservierungen!</h3>';
 }
 ?>

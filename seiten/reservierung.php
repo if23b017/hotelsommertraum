@@ -55,21 +55,24 @@ function calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, 
     return $sum;
 }
 
-function roomIsBooked($conn, $room, $arrival, $departure)
+function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
 {
-    $sql = "SELECT * FROM reservations WHERE room = ? AND arrivaltime = ? AND departuretime = ?";
+    $sql = "SELECT * FROM reservations WHERE room = ? AND 
+            ((arrivaltime <= ? AND departuretime >= ?) OR 
+            (arrivaltime <= ? AND departuretime >= ?) OR 
+            (arrivaltime >= ? AND departuretime <= ?))";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("Location: index.php?page=landing&error=stmtFailed");
         exit();
     }
-    mysqli_stmt_bind_param($stmt, "sss", $room, $arrivaltime, $departuretime);
+    mysqli_stmt_bind_param($stmt, "sssssss", $room, $arrivaltime, $arrivaltime, $departuretime, $departuretime, $arrivaltime, $departuretime);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($row = mysqli_fetch_assoc($result)) {
-        return false;
-    } else {
         return true;
+    } else {
+        return false;
     }
 }
 ?>
@@ -143,7 +146,7 @@ function roomIsBooked($conn, $room, $arrival, $departure)
                     $pets = 0;
                 }
                 $sum = calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, $pets);
-                
+
                 //TODO: zeitliche Verfügbarkeit checken
                 if (isset($departuretime) && isset($arrivaltime)) {
                     $reservationdate = date("Y-m-d", strtotime($reservationdate));
@@ -156,7 +159,7 @@ function roomIsBooked($conn, $room, $arrival, $departure)
                     <?php } else if (strtotime($departuretime) <= strtotime($arrivaltime)) { ?>
                             <p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>
                     <?php } else if (roomIsBooked($conn, $room, $arrivaltime, $departuretime)) { ?>
-                        <p style="color: red">Der Raum ist weg oida</p>
+                                <p style="color: red">Der Raum ist leider schon reserviert!</p>
                     <?php } else {
                         $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
