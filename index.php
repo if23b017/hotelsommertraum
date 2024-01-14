@@ -36,7 +36,7 @@ session_start();
     "registrierungsformular" => "seiten/registrierungsformular.php",
     "reservierung" => "seiten/reservierung.php",
     "reservierungen" => "seiten/reservierungen.php",
-    "userVerwaltung" => "seiten/userVerwaltung.php",
+    "userverwaltung" => "seiten/userverwaltung.php",
     "reservierungsverwaltung" => "seiten/reservierungsverwaltung.php",
     //TODO: Seiten hinzugefügen
   ];

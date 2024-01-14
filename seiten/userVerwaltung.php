@@ -84,7 +84,7 @@ if ($result->num_rows > 0) {
                 ?>
                 <div class="user-info">
                     <form method="post" id="user-form"
-                        action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?page=userVerwaltung"); ?>">
+                        action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?page=userverwaltung"); ?>">
                         <input type="hidden" name="userId" value="<?php echo $userId; ?>">
                         <div class="user-info-row">
                             <div class="user-info-column" style="margin-bottom: 10px;">

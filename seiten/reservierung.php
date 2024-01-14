@@ -55,6 +55,23 @@ function calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, 
     return $sum;
 }
 
+function roomIsBooked($conn, $room, $arrival, $departure)
+{
+    $sql = "SELECT * FROM reservations WHERE room = ? AND arrivaltime = ? AND departuretime = ?";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: index.php?page=landing&error=stmtFailed");
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, "sss", $room, $arrivaltime, $departuretime);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if ($row = mysqli_fetch_assoc($result)) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $room = $_SESSION['zimmer'];
@@ -126,34 +143,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="d-grid gap-3 col-3 mx-auto">
                 <input class="btn btn-primary" type="submit" value="Buchen">
             </div>
-
             <br>
-
             <?php
-
-
-
             //TODO: zeitliche Verfügbarkeit checken
             if (isset($departuretime) && isset($arrivaltime)) {
                 $reservationdate = date("Y-m-d", strtotime($reservationdate));
                 $timestamp = time();
                 $today = date("d.m.Y", $timestamp);
-                if ($arrivaltime <= $today) { ?>
+                if (strtotime($arrivaltime) <= strtotime(date("d.m.Y", time()))) { ?>
                     <p style="color: red;">Anreisedatum muss nach
                         <?php echo $today ?> sein!
                     </p>
-                <?php } else if ($departuretime <= $arrivaltime) { ?>
+                <?php } else if (strtotime($departuretime) <= strtotime($arrivaltime)) { ?>
                         <p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>
-                <?php } else {
+                <?php } else if (roomIsBooked($conn, $room, $arrivaltime, $departuretime)) {
+                } else {
                     $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = mysqli_stmt_init($conn);
-
                     if (!mysqli_stmt_prepare($stmt, $sql)) {
                         header("Location: index.php?page=landing&error=stmtFailed");
                         exit();
                     }
-
                     mysqli_stmt_bind_param($stmt, "sssiiiisi", $room, $arrivaltime, $departuretime, $breakfast, $pets, $parking, $sum, $reservationdate, $FK_userId);
                     mysqli_stmt_execute($stmt);
                     if ($breakfast == 1) {
@@ -172,15 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $pets = "nicht inkludiert";
                     }
                     ?>
-                        <div class="alert alert-success" role="alert">Deine Reise vom
+                            <div class="alert alert-success" role="alert">Deine Reise vom
                         <?php echo $arrivaltime ?> bis
                         <?php echo $departuretime ?>
-                            wurde mit folgenden Bemerkungen gebucht: Frühstück
+                                wurde mit folgenden Bemerkungen gebucht: Frühstück
                         <?php echo $breakfast ?> Parkplatz
                         <?php echo $parking ?> Haustiere
                         <?php echo $pets ?>
-
-                        </div>
+                            </div>
                     <?php
                 }
             }

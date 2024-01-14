@@ -47,7 +47,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.php?page=userVerwaltung">
+            <a class="nav-link" href="index.php?page=userverwaltung">
               <h4>User</h4>
             </a>
           </li>
