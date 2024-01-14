@@ -228,7 +228,7 @@ if ($result->num_rows > 0) {
                         <select name="role" style="width: 225px;">
                             <option value="neu" <?php if ($status == "neu")
                                 echo "selected"; ?>>Neu</option>
-                            <option value="storno" <?php if ($status == "storniert")
+                            <option value="storno" <?php if ($status == "storno")
                                 echo "selected"; ?>>Storniert</option>
                             <option value="bestätigt" <?php if ($status == "bestätigt")
                                 echo "selected"; ?>>Bestätigt</option>
