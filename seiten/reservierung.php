@@ -80,25 +80,25 @@
                     /* Fehlermeldung */
                 }
                 /* Parameter an das Statement binden */
-            }
-            if (isset($departure) && isset($arrival)) {
+                if (isset($departure) && isset($arrival)) {
 
-                $timestamp = time();
-                $today = date("d.m.Y", $timestamp);
-                if ($arrival <= $today) {
-                    echo '<p style="color: red;">Anreisedatum muss nach ' . $today . ' sein!</p>';
-                } else if ($departure <= $arrival) {
-                    echo '<p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>';
-                } else {
-                    echo '<div class="alert alert-success" role="alert">Deine Reise vom ' . $arrival . ' bis ' . $departure .
-                        ' wurde mit folgenden Bemerkungen gebucht: Frühstück ' . $breakfast . ', Parkplatz ' . $parking .
-                        ', Haustiere ' . $tiere . '</div>';
-                    //FIXME: auf richtige Seite umleiten
-                    ?>
-                        <a href="reservierungen.php">
-                            <h3>Meine Buchungen</h3>
-                        </a>
-                <?php }
+                    $timestamp = time();
+                    $today = date("d.m.Y", $timestamp);
+                    if ($arrival <= $today) {
+                        echo '<p style="color: red;">Anreisedatum muss nach ' . $today . ' sein!</p>';
+                    } else if ($departure <= $arrival) {
+                        echo '<p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>';
+                    } else {
+                        echo '<div class="alert alert-success" role="alert">Deine Reise vom ' . $arrival . ' bis ' . $departure .
+                            ' wurde mit folgenden Bemerkungen gebucht: Frühstück ' . $breakfast . ', Parkplatz ' . $parking .
+                            ', Haustiere ' . $tiere . '</div>';
+                        //FIXME: auf richtige Seite umleiten
+                        ?>
+                            <a href="reservierungen.php">
+                                <h3>Meine Buchungen</h3>
+                            </a>
+                    <?php }
+                }
             }
 
             function test_input($data)
