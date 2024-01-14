@@ -60,7 +60,8 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
     $sql = "SELECT * FROM reservations WHERE room = ? AND 
             ((arrivaltime <= ? AND departuretime >= ?) OR 
             (arrivaltime <= ? AND departuretime >= ?) OR 
-            (arrivaltime >= ? AND departuretime <= ?))";
+            (arrivaltime >= ? AND departuretime <= ?)) AND
+            (status != 'storno')";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("Location: index.php?page=landing&error=stmtFailed");
