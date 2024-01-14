@@ -1,18 +1,20 @@
 <?php include 'utils/head.php'; ?>
 
-<?php /*if ($_SESSION['role'] !== 'admin') {
-header("location: index.php?page=landing&error=notAdmin");
-exit();
-}*/?>
+<?php
+if ($_SESSION["admin"] !== true) {
+    header("location: index.php?page=landing&error=notAdmin");
+    exit();
+}
+?>
 
 <?php
 require_once 'utils/dbaccess.php';
 ?>
 
 <?php
-//TODO: User updaten
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $userId = $_POST["userId"];
     if ($_POST["gender"] == "Herr") {
         $anrede = "H";
@@ -24,36 +26,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = $_POST["birthdate"];
     $email = $_POST["email"];
     $role = $_POST["role"];
-
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $userId = $_POST["userId"];
-        if ($_POST["gender"] == "Herr") {
-            $anrede = "H";
-        } else {
-            $anrede = "F";
-        }
-        $firstname = $_POST["firstname"];
-        $lastname = $_POST["lastname"];
-        $date = $_POST["birthdate"];
-        $email = $_POST["email"];
-        $role = $_POST["role"];
-
-        $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ? WHERE userId = ?";
-        $stmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("location: index.php?page=landing&error=stmtfailed");
-            exit();
-            /* Fehlermeldung */
-        }
-
-        mysqli_stmt_bind_param($stmt, "ssssssi", $anrede, $firstname, $lastname, $date, $email, $role, $userId);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
+    if ($_POST["active"] == "active") {
+        $active = 1;
+    } else {
+        $active = 0;
     }
+
+    $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ?, active = ? WHERE userId = ?";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: index.php?page=landing&error=stmtfailed");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "ssssssii", $anrede, $firstname, $lastname, $date, $email, $role, $active, $userId);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
 }
-/* Parameter an das Statement binden */
 ?>
 
 <?php
@@ -67,9 +57,6 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-
-//TODO: code fixen
-
 if ($result->num_rows > 0) {
     ?>
     <div class="login-box d-flex justify-content-center align-items-center"
@@ -79,18 +66,21 @@ if ($result->num_rows > 0) {
             <?php
             while ($row = mysqli_fetch_assoc($result)) {
                 $userId = $row["userId"];
-                $anrede = ($row["gender"] == "H") ? "Herr" : "Frau";
+                if ($row["gender"] == "H") {
+                    $anrede = "Herr";
+                } else {
+                    $anrede = "Frau";
+                }
                 $firstname = $row["firstname"];
                 $lastname = $row["lastname"];
                 $date = $row["birthdate"];
                 $email = $row["email"];
                 $role = $row["role"];
                 if ($row["active"] == 1) {
-                    $active = "derzeit aktiv";
+                    $active = "1";
                 } else {
-                    $active = "derzeit nicht aktiv";
+                    $active = "0";
                 }
-                //TODO: HTML Code + active
                 ?>
                 <div class="user-info">
                     <form method="post" id="user-form"
@@ -129,6 +119,15 @@ if ($result->num_rows > 0) {
                                         echo "selected"; ?>>User</option>
                                     <option value="admin" <?php if ($role == "admin")
                                         echo "selected"; ?>>Admin</option>
+                                </select>
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="active" style="display: inline-block; width: 150px;">Status:</label>
+                                <select name="active" style="width: 225px;">
+                                    <option value="active" <?php if ($active == "1")
+                                        echo "selected"; ?>>Aktiv</option>
+                                    <option value="inactive" <?php if ($active == "0")
+                                        echo "selected"; ?>>Inaktiv</option>
                                 </select>
                             </div>
                             <div class="user-info-column" style="margin: 20px;">

@@ -56,10 +56,6 @@ require_once 'utils/functions.php';
                 }
 
                 $birthDate = date("Y-m-d", strtotime($date));
-                $_SESSION["firstname"] = $firstname;
-                $_SESSION["lastname"] = $lastname;
-                $_SESSION["email"] = $email;
-                $_SESSION["date"] = $date;
 
                 $sql = "UPDATE users SET firstname = ? , lastname = ? , email = ?, birthdate = ? WHERE email = ?";
                 $stmt = mysqli_stmt_init($conn);
@@ -157,7 +153,7 @@ require_once 'utils/functions.php';
                 <input type="text" class="form-control" name="lastname" placeholder="Nachname" tabindex="2"
                     value="<?php echo $lastname; ?>">
                 <input type="text" class="form-control" name="email" placeholder="E-Mail-Adresse" tabindex="3"
-                    value="<?php echo $email; ?>">
+                    value="<?php echo $email; ?>" readonly>
                 <input type="date" class="form-control" name="date" tabindex="4" value="<?php echo $birthDate; ?>">
                 <div class="mb-3">
                     <div class="d-grid gap-4 col-5 mx-auto">

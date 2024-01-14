@@ -1,9 +1,3 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-  session_start();
-}
-?>
-
 <div class="container" style="margin-bottom: 100px;">
   <h1>Login</h1>
 
@@ -36,23 +30,28 @@ if (session_status() == PHP_SESSION_NONE) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $email = test_input($_POST["email"]);
       $password = test_input($_POST["password"]);
+
       if (!empty($email) && !empty($password)) {
         $userData = emailExists($conn, $email);
-        if ($userData) {
-          if (password_verify($password, $userData['password'])) {
-            $_SESSION['login'] = true;
-            setcookie("email", $_POST["email"], time() + (86400 * 30), "/");
-            if ($userData['role'] == 'admin') {
-              $_SESSION['admin'] = true;
-              header("Location: index.php?page=landing&error=noneAdminLogin");
+        if ($userData["active"] == 1) {
+          if ($userData) {
+            if (password_verify($password, $userData['password'])) {
+              $_SESSION['login'] = true;
+              setcookie("email", $_POST["email"], time() + (86400 * 30), "/");
+              if ($userData['role'] == 'admin') {
+                $_SESSION['admin'] = true;
+                header("Location: index.php?page=landing&error=noneAdminLogin");
+              } else {
+                header("Location: index.php?page=landing&error=noneLogin");
+              }
             } else {
-              header("Location: index.php?page=landing&error=noneLogin");
+              header("Location: index.php?page=loginformular&error=wrongPassword");
             }
           } else {
-            header("Location: index.php?page=loginformular&error=wrongPassword");
+            header("Location: index.php?page=loginformular&error=wrongEmail");
           }
         } else {
-          header("Location: index.php?page=loginformular&error=wrongEmail");
+          header("Location: index.php?page=loginformular&error=notActive");
         }
       }
     }
@@ -100,6 +99,9 @@ if (isset($_GET["error"])) {
   <?php }
   if ($_GET["error"] == "wrongEmail") { ?>
     <h3>E-Mail-Adresse nicht gefunden</h3>
+  <?php }
+  if ($_GET["error"] == "notActive") { ?>
+    <h3>Dein Account ist nicht aktiv. Melde dich bei einem Admin</h3>
   <?php }
 }
 ?>

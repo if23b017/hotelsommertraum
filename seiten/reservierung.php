@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-            //TODO: zeitliche Verfügbarkeit checken und Preis berechnen, sowie Reservierungsdatum speichern
+            //TODO: zeitliche Verfügbarkeit checken
             if (isset($departuretime) && isset($arrivaltime)) {
                 $reservationdate = date("Y-m-d", strtotime($reservationdate));
                 $timestamp = time();
@@ -145,6 +145,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php } else if ($departuretime <= $arrivaltime) { ?>
                         <p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>
                 <?php } else {
+                    $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_stmt_init($conn);
+
+                    if (!mysqli_stmt_prepare($stmt, $sql)) {
+                        header("Location: index.php?page=landing&error=stmtFailed");
+                        exit();
+                    }
+
+                    mysqli_stmt_bind_param($stmt, "sssiiiisi", $room, $arrivaltime, $departuretime, $breakfast, $pets, $parking, $sum, $reservationdate, $FK_userId);
+                    mysqli_stmt_execute($stmt);
                     if ($breakfast == 1) {
                         $breakfast = "inkludiert";
                     } else {
@@ -170,18 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php echo $pets ?>
 
                         </div>
-                        <?php
-                        $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        $stmt = mysqli_stmt_init($conn);
-
-                        if (!mysqli_stmt_prepare($stmt, $sql)) {
-                            header("Location: index.php?page=landing&error=stmtFailed");
-                            exit();
-                        }
-
-                        mysqli_stmt_bind_param($stmt, "sssiiiisi", $room, $arrivaltime, $departuretime, $breakfast, $pets, $parking, $sum, $reservationdate, $FK_userId);
-                        mysqli_stmt_execute($stmt);
+                    <?php
                 }
             }
             ?>

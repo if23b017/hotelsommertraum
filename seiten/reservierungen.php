@@ -1,33 +1,60 @@
-</div class="container" style="margin-bottom: 100px;">
-<h1>Ihre Reservierungen</h1>
-<div class="d-grid gap-3 col-6 mx-auto">
-    <h3 style="text-align: justify;">
-        <?php
-        if (isset($_SESSION['zimmer'])) {
-            echo 'Zimmer: ' . $_SESSION['zimmer'] . '<br>';
-        }
-        if (isset($_SESSION['arrival'])) {
-            echo 'Anreisedatum: ' . $_SESSION['arrival'] . '<br>';
-        }
-        if (isset($_SESSION['departure'])) {
-            echo 'Abreisedatum: ' . $_SESSION['departure'] . '<br>';
-        }
-        if (isset($_SESSION['breakfast'])) {
-            echo 'Frühstück: ' . $_SESSION['breakfast'] . '<br>';
-        }
-        if (isset($_SESSION['parking'])) {
-            echo 'Parkplatz: ' . $_SESSION['parking'] . '<br>';
-        }
-        if (isset($_SESSION['tiere'])) {
-            echo 'Haustiere: ' . $_SESSION['tiere'] . '<br>';
-        }
-        if (
-            empty($_SESSION['zimmer']) && empty($_SESSION['arrival']) && empty($_SESSION['departure'])
-            && empty($_SESSION['breakfast']) && empty($_SESSION['parking']) && empty($_SESSION['tiere'])
-        ) {
-            echo '<h2>Du hast derzeit keine Buchungen!</h2>';
-        }
-        ?>
-    </h3>
-</div>
+<div class="container" style="margin-bottom: 100px;">
+    <h1>Ihre Reservierungen</h1>
+    <div class="d-grid gap-3 col-6 mx-auto">
+        <h3 style="text-align: justify;">
+            <?php
+            require_once 'utils/dbaccess.php';
+            $sql = "SELECT * FROM users WHERE email = '" . $_COOKIE["email"] . "'";
+            $stmt = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                header("Location: index.php?page=landing&error=stmtfailed");
+            }
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($result);
+            $userId = $row["userId"];
+            $sql = "SELECT * FROM reservations WHERE FK_userId = '" . $userId . "'";
+            $stmt = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($stmt, $sql)) {
+                header("Location: index.php?page=landing&error=stmtfailed");
+            }
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            if ($result->num_rows > 0) {
+                $number = 1;
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if ($row["breakfast"] == 1) {
+                        $breakfast = "inkludiert";
+                    } else {
+                        $breakfast = "nicht inkludiert";
+                    }
+                    if ($row["parking"] == 1) {
+                        $parking = "inkludiert";
+                    } else {
+                        $parking = "nicht inkludiert";
+                    }
+                    if ($row["pets"] == 1) {
+                        $pets = "inkludiert";
+                    } else {
+                        $pets = "nicht inkludiert";
+                    }
+                    echo "Reservierung " . $number . "<br>";
+                    echo "Zimmer: " . $row["room"] . "<br>";
+                    echo "Anreise: " . $row["arrivaltime"] . "<br>";
+                    echo "Abreise: " . $row["departuretime"] . "<br>";
+                    echo "Frühstück: " . $breakfast . "<br>";
+                    echo "Parkplatz: " . $parking . "<br>";
+                    echo "Haustiere: " . $pets . "<br>";
+                    echo "Preis: " . $row["sum"] . "€<br>";
+                    echo "Reservierungsdatum: " . date("d.m.y", strtotime($row["reservationDate"])) . "<br>";
+                    echo "Status: " . $row["status"] . "<br>";
+                    echo "<br>";
+                    $number++;
+                }
+            } else {
+                echo "Sie haben noch keine Reservierungen getätigt!";
+            }
+            ?>
+        </h3>
+    </div>
 </div>
