@@ -22,4 +22,3 @@ function emailExists($conn, $email)
     $result = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_assoc($result);
 }
-?>

@@ -4,6 +4,8 @@
         <h3 style="text-align: justify;">
             <?php
             require_once 'utils/dbaccess.php';
+
+            // Abfrage des Benutzers anhand der E-Mail aus dem Cookie
             $sql = "SELECT * FROM users WHERE email = '" . $_COOKIE["email"] . "'";
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -13,6 +15,8 @@
             $result = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($result);
             $userId = $row["userId"];
+
+            // Abfrage der Reservierungen des Benutzers anhand der Benutzer-ID
             $sql = "SELECT * FROM reservations WHERE FK_userId = '" . $userId . "'";
             $stmt = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -20,9 +24,12 @@
             }
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
+
+            // Überprüfen, ob Reservierungen vorhanden sind
             if ($result->num_rows > 0) {
                 $number = 1;
                 while ($row = mysqli_fetch_assoc($result)) {
+                    // Überprüfen und Zuweisen von Werten für Frühstück, Parkplatz und Haustiere
                     if ($row["breakfast"] == 1) {
                         $breakfast = "inkludiert";
                     } else {
@@ -38,6 +45,8 @@
                     } else {
                         $pets = "nicht inkludiert";
                     }
+
+                    // Ausgabe der Reservierungsinformationen
                     echo "Reservierung " . $number . "<br>";
                     echo "Zimmer: " . $row["room"] . "<br>";
                     echo "Anreise: " . $row["arrivaltime"] . "<br>";

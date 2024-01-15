@@ -7,6 +7,9 @@
   require_once 'utils/dbaccess.php';
   require_once 'utils/functions.php';
 
+  // Überprüfen, ob das Formular abgeschickt wurde
+  // und Validierung der Eingabefelder
+  
   $email = $password = "";
   $emailErr = $passwordErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,7 +28,8 @@
     }
   }
 
-
+  // Überprüfen, ob die Eingaben korrekt sind
+  // und Weiterleitung basierend auf dem Benutzerstatus
   if (empty($emailErr) && empty($passwordErr)) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $email = test_input($_POST["email"]);
@@ -78,6 +82,7 @@
 </div>
 
 <?php
+// Anzeigen von Fehlermeldungen
 if (!empty($emailErr)) { ?>
   <h3>
     <?php echo $emailErr ?>
@@ -90,6 +95,7 @@ if (!empty($passwordErr)) { ?>
   </h3>
 <?php }
 
+// Anzeigen von Erfolgsmeldungen oder Fehlermeldungen
 if (isset($_GET["error"])) {
   if ($_GET["error"] == "noneRegister") { ?>
     <h3>Erfolgreich registriert. Bitte Einloggen</h3>

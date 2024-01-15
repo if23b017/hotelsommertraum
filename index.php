@@ -38,7 +38,6 @@ session_start();
     "reservierungen" => "seiten/reservierungen.php",
     "userverwaltung" => "seiten/userverwaltung.php",
     "reservierungsverwaltung" => "seiten/reservierungsverwaltung.php",
-    //TODO: Seiten hinzugefügen
   ];
   if (isset($pages[$page])) {
     if (file_exists($pages[$page])) {

@@ -1,19 +1,21 @@
 <?php
-
+// Überprüfung, ob der Benutzer ein Administrator ist
 if ($_SESSION["admin"] !== true) {
     header("location: index.php?page=landing&error=notAdmin");
     exit();
 }
 
 require_once "utils/dbaccess.php";
-?>
 
+?>
 
 <h1>Reservierungen</h1>
 
 <?php
+// Funktion zur Berechnung der neuen Summe basierend auf Zimmer, Anreisezeit, Abreisezeit, Frühstück, Parkplatz und Haustieren
 function calculateNewSum($room, $arrivaltime, $departuretime, $breakfast, $parking, $pets)
 {
+    // Berechnung des Zimmerpreises basierend auf dem ausgewählten Zimmer
     if ($room == "Doppelbettzimmer") {
         $sum = 50;
     } else if ($room == "Luxussuite") {
@@ -23,9 +25,13 @@ function calculateNewSum($room, $arrivaltime, $departuretime, $breakfast, $parki
     } else if ($room == "Luxussuite mit Jacuzzi und Sauna") {
         $sum = 500;
     }
+
+    // Berechnung der Anzahl der Tage basierend auf Anreise- und Abreisezeit
     $arrivaltime = strtotime($arrivaltime);
     $departuretime = strtotime($departuretime);
     $days = ($departuretime - $arrivaltime) / 86400;
+
+    // Berechnung der Gesamtsumme basierend auf Zimmerpreis, Anzahl der Tage und zusätzlichen Optionen
     $sum = $sum * $days;
     if ($breakfast == 1) {
         $sum += 10 * $days;
@@ -36,13 +42,16 @@ function calculateNewSum($room, $arrivaltime, $departuretime, $breakfast, $parki
     if ($pets == 1) {
         $sum += 10 * $days;
     }
-    return $sum;
-} ?>
 
+    return $sum;
+}
+
+?>
 
 <?php
-
+// Überprüfung, ob das Formular abgeschickt wurde (POST-Methode)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Auslesen der Formulardaten
     $reservationId = $_POST['reservation_id'];
     $arrivaltime = $_POST['arrivaltime'];
     $departuretime = $_POST['departuretime'];
@@ -52,10 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pets = $_POST['pets'] == 'inkludiert' ? 1 : 0;
     $status = $_POST['role'];
 
+    // Berechnung der neuen Summe
     $sum = calculateNewSum($room, $arrivaltime, $departuretime, $breakfast, $parking, $pets);
 
-    $sql = "UPDATE reservations SET arrivaltime = ?, departuretime = ?, room = ?, sum = ?, breakfast = ?, parking = ?, pets
-= ?, status = ? WHERE reservationId = ?";
+    // Aktualisierung der Reservierung in der Datenbank
+    $sql = "UPDATE reservations SET arrivaltime = ?, departuretime = ?, room = ?, sum = ?, breakfast = ?, parking = ?, pets = ?, status = ? WHERE reservationId = ?";
 
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -79,11 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_execute($stmt);
 }
 
-
 ?>
 
 <?php
-
+// Abfrage aller Reservierungen aus der Datenbank
 $sql = "SELECT * FROM reservations;";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -93,11 +102,11 @@ if (!mysqli_stmt_prepare($stmt, $sql)) {
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-
+// Überprüfung, ob Reservierungen vorhanden sind
 if ($result->num_rows > 0) {
-
     $number = 1;
     while ($row = mysqli_fetch_assoc($result)) {
+        // Abfrage des Benutzers, der die Reservierung gemacht hat
         $sql2 = "SELECT * FROM users WHERE userId = '" . $row["FK_userId"] . "'";
         $stmt2 = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt2, $sql2)) {
@@ -107,11 +116,15 @@ if ($result->num_rows > 0) {
         mysqli_stmt_execute($stmt2);
         $result2 = mysqli_stmt_get_result($stmt2);
         $row2 = mysqli_fetch_assoc($result2);
+
+        // Auslesen der Reservierungsinformationen
         $room = $row["room"];
         $arrivaltime = date("d.m.Y", strtotime($row["arrivaltime"]));
         $departuretime = date("d.m.Y", strtotime($row["departuretime"]));
         $sum = $row["sum"] . "€";
         $status = $row["status"];
+
+        // Überprüfung der zusätzlichen Optionen
         if ($row["breakfast"] == 1) {
             $breakfast = "inkludiert";
         } else {
@@ -127,6 +140,8 @@ if ($result->num_rows > 0) {
         } else {
             $pets = "nicht inkludiert";
         }
+
+        // Überprüfung des Geschlechts des Benutzers
         if ($row2["gender"] == "H") {
             $anrede = "Herr";
         } else {
@@ -135,20 +150,16 @@ if ($result->num_rows > 0) {
 
         $formId = "reservation-form" . $row['reservationID'];
 
+        // Ausgabe der Reservierungsinformationen und des Formulars zur Aktualisierung
         ?>
-
-
-
-
-
 
         <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin-bottom: 50px;">
             <div style="text-align: center;">
-                <p>
+                <h3>
                     <?php echo $anrede ?>
                     <?php echo $row2["firstname"] ?>
                     <?php echo $row2["lastname"] ?>
-                </p>
+                </h3>
             </div>
         </div>
         <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin-bottom: 100px;">

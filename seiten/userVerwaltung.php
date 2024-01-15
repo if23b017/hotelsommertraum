@@ -1,6 +1,7 @@
 <?php include 'utils/head.php'; ?>
 
 <?php
+// Überprüfung, ob der Benutzer ein Administrator ist
 if ($_SESSION["admin"] !== true) {
     header("location: index.php?page=landing&error=notAdmin");
     exit();
@@ -12,7 +13,7 @@ require_once 'utils/dbaccess.php';
 ?>
 
 <?php
-
+// Prüft ob das formular abgeschickt wurde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $userId = $_POST["userId"];
@@ -32,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $active = 0;
     }
 
+    // Aktualisiert die Benutzerinformationen in der Datenbank
     $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ?, active = ? WHERE userId = ?";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -47,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <?php
-
+// Holt alle Benutzer aus der Datenbank
 $sql = "SELECT * FROM users;";
 $stmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($stmt, $sql)) {

@@ -1,9 +1,8 @@
 <?php require_once 'utils/dbaccess.php'; ?>
 
-
 <?php
 
-
+// Funktion zur Überprüfung und Bereinigung der Eingabedaten
 function test_input($data)
 {
   $data = trim($data);
@@ -12,6 +11,7 @@ function test_input($data)
   return $data;
 }
 
+// Funktion zur Überprüfung, ob die E-Mail bereits in der Datenbank existiert
 function registerEmailExists($conn, $email)
 {
   $sql = "SELECT * FROM users WHERE email = ?;";
@@ -27,12 +27,14 @@ function registerEmailExists($conn, $email)
   return mysqli_fetch_assoc($result);
 }
 
+// Initialisierung der Variablen
 $anrede = $email = $firstname = $lastname = $password = $password2 = $date = "";
 $anredeErr = $emailErr = $firstnameErr = $lastnameErr = $passwordErr = $passwordErr2 = $dateErr =
   $passwordErrLength = $passwordErrNumber = $passwordErrBig = $passwordErrLow = $passwordErrident = "";
 
-
+// Überprüfung der Formulardaten nach dem Absenden
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Überprüfung des Vornamens
   if (empty($_POST["firstname"])) {
     $firstnameErr = "*Vorname erforderlich";
   } else {
@@ -42,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
+  // Überprüfung des Nachnamens
   if (empty($_POST["lastname"])) {
     $lastnameErr = "*Nachname erforderlich";
   } else {
@@ -51,40 +54,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
+  // Überprüfung der E-Mail-Adresse
   if (empty($_POST["email"])) {
     $emailErr = "*Email erforderlich";
   } else {
     $email = test_input($_POST["email"]);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $emailErr = "Invalid email format";
+      $emailErr = "Ungültiges E-Mail-Format";
     }
   }
 
+  // Überprüfung des Passworts
   if (empty($_POST["password"])) {
     $passwordErr = "*Passwort erforderlich";
   } else {
     $password = test_input($_POST["password"]);
   }
 
+  // Überprüfung der Passwortbestätigung
   if (empty($_POST["password2"])) {
     $passwordErr2 = "*erforderlich";
   } else if ($_POST['password'] != $_POST['password2']) {
-    $passwordErrident = "Passwort ist nicht ident!";
+    $passwordErrident = "*Passwort ist nicht ident!";
   } else {
     $password2 = test_input($_POST["password2"]);
   }
 
+  // Überprüfung des Geburtsdatums
   if (empty($_POST["date"])) {
     $dateErr = "*Geburtsdatum erforderlich";
   } else {
     $date = test_input($_POST["date"]);
   }
 
+  // Überprüfung der Anrede
   if (empty($_POST["anrede"])) {
     $anredeErr = "*erforderlich";
   } else {
     $anrede = test_input($_POST["anrede"]);
   }
+
+  // Überprüfung der Passwortkomplexität
   if (strlen($_POST["password"]) < 8) {
     $passwordErrLength = "*Passwort muss mindestens 8 Zeichen lang sein";
   }
@@ -98,26 +108,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passwordErrLow = "*Passwort muss mindestens einen Kleinbuchstaben enthalten";
   }
 
+  // Überprüfung, ob alle Formulardaten korrekt sind
   if (
     $anrede != "" && $firstname != "" && $lastname != "" && $email != "" && $password != "" && $password2 != "" && $date != "" &&
     $passwordErrLength == "" && $passwordErrNumber == "" && $passwordErrBig == "" && $passwordErrLow == "" && $anredeErr == "" &&
     $firstnameErr == "" && $lastnameErr == "" && $emailErr == "" && $passwordErr == "" && $passwordErr2 == "" && $dateErr == ""
   ) {
+    // Überprüfung, ob die E-Mail bereits in der Datenbank existiert
     if (registerEmailExists($conn, $_POST["email"])) {
       header("Location: index.php?page=registrierungsformular&error=emailExists");
     } else {
+      // Konvertierung der Anrede in Datenbankformat
       if ($_POST["anrede"] == "Herr") {
         $dbgender = "H";
       } else {
         $dbgender = "F";
       }
+
+      // Konvertierung des Geburtsdatums in das richtige Format
       $birth = test_input($_POST["date"]);
       $birthdate = date("Y-m-d", strtotime($birth));
 
-      // Insert the data into the database
+      // Einfügen der Daten in die Datenbank
       $sql = "INSERT INTO users (email, password, role, firstname, lastname, gender, birthdate) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-      // Execute the statement
+      // Ausführen des SQL-Statements
       $stmt = mysqli_stmt_init($conn);
 
       if (!mysqli_stmt_prepare($stmt, $sql)) {

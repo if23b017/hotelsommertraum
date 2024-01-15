@@ -1,12 +1,13 @@
 <?php
+// Überprüfen, ob der Benutzer angemeldet ist
 if (!isset($_COOKIE["email"])) {
     header("Location: index.php?page=landing&error=notloggedin");
     exit();
 }
 ?>
 
-
 <?php
+// Erforderliche Dateien einbinden
 require_once 'utils/dbaccess.php';
 require_once 'utils/functions.php';
 ?>
@@ -16,10 +17,12 @@ require_once 'utils/functions.php';
 <div class="container" style="margin-bottom: 100px;">
 
     <?php
+    // Variablen initialisieren
     $firstname = $lastname = $email = $date = $password = $newPassword = "";
     $passwordErr = $passwordErrident = $newPasswordErr = $passwordErrLength =
         $passwordErrNumber = $passwordErrBig = $passwordErrLow = $wrongOldPassword = "";
 
+    // Benutzerdaten aus der Datenbank abrufen
     $sql = "SELECT * FROM users WHERE email = '" . $_COOKIE["email"] . "'";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -37,11 +40,11 @@ require_once 'utils/functions.php';
     $date = test_input($row["birthdate"]);
     $birthDate = date("Y-m-d", strtotime($date));
 
-
+    // Überprüfen, ob das Formular abgeschickt wurde
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["form"])) {
             if ($_POST["form"] == "profile") {
-                // Validate and update profile data
+                // Profildaten validieren und aktualisieren
                 if (isset($_POST["firstname"])) {
                     $firstname = test_input($_POST["firstname"]);
                 }
@@ -66,9 +69,8 @@ require_once 'utils/functions.php';
                 mysqli_stmt_bind_param($stmt, "sssss", $firstname, $lastname, $email, $birthDate, $_COOKIE["email"]);
                 mysqli_stmt_execute($stmt);
 
-
             } elseif ($_POST["form"] == "password") {
-
+                // Passwort ändern
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (isset($_POST["form"])) {
                         if ($_POST["form"] == "password") {
@@ -76,8 +78,9 @@ require_once 'utils/functions.php';
                                 $passwordErr = "*Alle Felder müssen ausgefüllt werden";
                             } else {
                                 $oldPassword = $_POST["oldPassword"];
-                                $hashedPassword = $row["password"]; // Fetch the hashed password from the database
-    
+                                $hashedPassword = $row["password"];
+
+                                // Überprüfen, ob das alte Passwort korrekt ist und das neue Passwort mit der Bestätigung übereinstimmt
                                 if (password_verify($oldPassword, $hashedPassword) && $_POST["newPassword"] == $_POST["newPassword2"]) {
                                     $newPassword = password_hash($_POST["newPassword"], PASSWORD_DEFAULT);
                                     $sql = "UPDATE users SET password = ? WHERE email = ?";
@@ -93,8 +96,7 @@ require_once 'utils/functions.php';
                                             </div>';
                                 }
 
-
-                                //neues Passwort und dazu Validierung
+                                // Neues Passwort validieren
                                 if (isset($_POST["newPassword"])) {
                                     $password = test_input($_POST["newPassword"]);
                                 }
@@ -120,13 +122,12 @@ require_once 'utils/functions.php';
                                 }
                                 if (isset($_POST["oldPassword"])) {
                                     $oldPassword = $_POST["oldPassword"];
-                                    $hashedPassword = $row["password"]; // Fetch the hashed password from the database
-    
+                                    $hashedPassword = $row["password"];
+
                                     if (!password_verify($oldPassword, $hashedPassword)) {
                                         $wrongOldPassword = "*Altes Passwort ist falsch!";
                                     }
                                 }
-
                             }
                         }
                     }
@@ -136,18 +137,17 @@ require_once 'utils/functions.php';
     }
     ?>
 
-    <div class="mb-3">
-        <div class="d-grid gap-4 col-5 mx-auto">
+
+    <div class="container mb-3">
+        <div class="d-grid gap-4 col-md-5 mx-auto">
             <a class="btn btn-primary" role="button" href="index.php?page=reservierungen">Meine Reservierungen</a>
         </div>
     </div>
 
-    <br>
-
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=account" ?>">
         <input type="hidden" name="form" value="profile">
         <div class="container">
-            <div class="d-grid gap-3 col-5 mx-auto">
+            <div class="d-grid gap-3 col-md-5 mx-auto">
                 <input type="text" class="form-control" name="firstname" placeholder="Vorname" tabindex="1"
                     value="<?php echo $firstname; ?>">
                 <input type="text" class="form-control" name="lastname" placeholder="Nachname" tabindex="2"
@@ -155,78 +155,63 @@ require_once 'utils/functions.php';
                 <input type="text" class="form-control" name="email" placeholder="E-Mail-Adresse" tabindex="3"
                     value="<?php echo $email; ?>" readonly>
                 <input type="date" class="form-control" name="date" tabindex="4" value="<?php echo $birthDate; ?>">
+
                 <div class="mb-3">
-                    <div class="d-grid gap-4 col-5 mx-auto">
+                    <div class="d-grid gap-4 col-md-5 mx-auto">
                         <input class="btn btn-primary" type="submit" value="Änderungen übernehmen" tabindex="5">
                     </div>
                 </div>
-                <br>
-
             </div>
         </div>
     </form>
 
-    <h3>
-        Passwort ändern:
-    </h3>
-
+    <h3>Passwort ändern:</h3>
 
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?page=account" ?>">
         <input type="hidden" name="form" value="password">
         <div class="container">
-            <div class="d-grid gap-4 col-5 mx-auto">
+            <div class="d-grid gap-4 col-md-5 mx-auto">
                 <input data-toggle="password" class="form-control" type="password" name="oldPassword"
                     placeholder="Altes Passwort" tabindex="6">
             </div>
-            <div class="mb-3">
-            </div>
-            <div class="d-grid gap-3 col-5 mx-auto">
+
+            <div class="mb-3"></div>
+
+            <div class="d-grid gap-3 col-md-5 mx-auto">
                 <input data-toggle="password" class="form-control" type="password" name="newPassword"
                     placeholder="Neues Passwort" tabindex="7">
                 <input data-toggle="password" class="form-control" type="password" name="newPassword2"
                     placeholder="Neues Passwort wiederholen" tabindex="8">
+
                 <div class="mb-3">
-                    <div class="d-grid gap-4 col-5 mx-auto">
+                    <div class="d-grid gap-4 col-md-5 mx-auto">
                         <input class="btn btn-primary" type="submit" value="Passwort ändern" tabindex="9">
                     </div>
                 </div>
-                <span class="error">
+
+                <div class="error">
                     <p style="color: red;">
-                        <?php
-                        echo $wrongOldPassword;
-                        ?>
+                        <?php echo $wrongOldPassword; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErr;
-                        ?>
+                        <?php echo $passwordErr; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErrLength;
-                        ?>
+                        <?php echo $passwordErrLength; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErrNumber;
-                        ?>
+                        <?php echo $passwordErrNumber; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErrBig;
-                        ?>
+                        <?php echo $passwordErrBig; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErrLow;
-                        ?>
+                        <?php echo $passwordErrLow; ?>
                     </p>
                     <p style="color: red;">
-                        <?php
-                        echo $passwordErrident;
-                        ?>
+                        <?php echo $passwordErrident; ?>
                     </p>
-                </span>
+                </div>
             </div>
         </div>
     </form>

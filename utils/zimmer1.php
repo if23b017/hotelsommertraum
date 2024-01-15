@@ -5,4 +5,3 @@ $_SESSION['zimmer'] = 'Doppelbettzimmer';
 
 header("Location: ../index.php?page=reservierung");
 exit();
-?>

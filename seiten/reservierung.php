@@ -11,6 +11,7 @@ require_once 'utils/dbaccess.php';
 ?>
 
 <?php
+// Überprüfen, ob der Benutzer angemeldet ist
 $status = $arrival = $departure = $arrivaltime = $departuretime = $breakfast = $parking = $pets = "";
 $sum = 0;
 $reservationdate = date("d.m.Y", time());
@@ -30,6 +31,7 @@ $FK_userId = $row['userId'];
 
 function calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, $pets)
 {
+    // Berechnung des Zimmerpreises basierend auf dem ausgewählten Zimmer
     if ($room == "Doppelbettzimmer") {
         $price = 50;
     } else if ($room == "Luxussuite") {
@@ -39,9 +41,11 @@ function calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, 
     } else if ($room == "Luxussuite mit Jacuzzi und Sauna") {
         $price = 500;
     }
+    // Berechnung der Anzahl der Tage zwischen Anreise und Abreise
     $arrival = strtotime($arrival);
     $departure = strtotime($departure);
     $days = ($departure - $arrival) / 86400;
+    // Berechnung der Gesamtsumme basierend auf Zimmerpreis und zusätzlichen Optionen
     $sum = $price * $days;
     if ($breakfast == 1) {
         $sum += 10 * $days;
@@ -57,6 +61,7 @@ function calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, 
 
 function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
 {
+    // Überprüfen, ob das Zimmer für den angegebenen Zeitraum bereits reserviert ist
     $sql = "SELECT * FROM reservations WHERE room = ? AND 
             ((arrivaltime <= ? AND departuretime >= ?) OR 
             (arrivaltime <= ? AND departuretime >= ?) OR 
@@ -148,20 +153,26 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
                 }
                 $sum = calculateSum($conn, $room, $arrival, $departure, $breakfast, $parking, $pets);
 
-                //TODO: zeitliche Verfügbarkeit checken
                 if (isset($departuretime) && isset($arrivaltime)) {
                     $reservationdate = date("Y-m-d", strtotime($reservationdate));
                     $timestamp = time();
                     $today = date("d.m.Y", $timestamp);
+                    // Überprüfen, ob das Anreisedatum in der Zukunft liegt
                     if (strtotime($arrivaltime) <= strtotime(date("d.m.Y", time()))) { ?>
                         <p style="color: red;">Anreisedatum muss nach
                             <?php echo $today ?> sein!
                         </p>
-                    <?php } else if (strtotime($departuretime) <= strtotime($arrivaltime)) { ?>
+                    <?php }
+                    // Überprüfen, ob das Abreisedatum nach dem Anreisedatum liegt
+                    else if (strtotime($departuretime) <= strtotime($arrivaltime)) { ?>
                             <p style="color: red;">Anreisedatum muss vor Abreisedatum liegen!</p>
-                    <?php } else if (roomIsBooked($conn, $room, $arrivaltime, $departuretime)) { ?>
+                    <?php }
+                    // Überprüfen, ob das Zimmer für den angegebenen Zeitraum bereits reserviert ist
+                    else if (roomIsBooked($conn, $room, $arrivaltime, $departuretime)) { ?>
                                 <p style="color: red">Der Raum ist leider schon reserviert!</p>
-                    <?php } else {
+                    <?php }
+                    // Wenn alle Bedingungen erfüllt sind, die Buchung in die Datenbank eintragen
+                    else {
                         $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = mysqli_stmt_init($conn);
@@ -171,6 +182,7 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
                         }
                         mysqli_stmt_bind_param($stmt, "sssiiiisi", $room, $arrivaltime, $departuretime, $breakfast, $pets, $parking, $sum, $reservationdate, $FK_userId);
                         mysqli_stmt_execute($stmt);
+                        // Anzeigen der Buchungsdetails
                         if ($breakfast == 1) {
                             $breakfast = "inkludiert";
                         } else {
@@ -189,8 +201,7 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
                         ?>
                                 <div class="alert alert-success" role="alert">Deine Reise vom
                             <?php echo $arrivaltime ?> bis
-                            <?php echo $departuretime ?>
-                                    wurde mit folgenden Bemerkungen gebucht: Frühstück
+                            <?php echo $departuretime ?> wurde mit folgenden Bemerkungen gebucht: Frühstück
                             <?php echo $breakfast ?> Parkplatz
                             <?php echo $parking ?> Haustiere
                             <?php echo $pets ?>
