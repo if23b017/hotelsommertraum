@@ -32,16 +32,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $active = 0;
     }
+    $password = $_POST["password"];
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Aktualisiert die Benutzerinformationen in der Datenbank
-    $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ?, active = ? WHERE userId = ?";
+    $sql = "UPDATE users SET gender = ?, firstname = ?, lastname = ?, birthdate = ?, email = ?, role = ?, active = ?, password = ? WHERE userId = ?";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: index.php?page=landing&error=stmtfailed");
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt, "ssssssii", $anrede, $firstname, $lastname, $date, $email, $role, $active, $userId);
+    mysqli_stmt_bind_param($stmt, "ssssssisi", $anrede, $firstname, $lastname, $date, $email, $role, $active, $hashedPassword, $userId);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
@@ -113,6 +115,10 @@ if ($result->num_rows > 0) {
                             <div class="user-info-column" style="margin-bottom: 10px;">
                                 <label for="email" style="display: inline-block; width: 150px;">Email:</label>
                                 <input type="email" name="email" value="<?php echo $email; ?>" style="width: 225px;">
+                            </div>
+                            <div class="user-info-column" style="margin-bottom: 10px;">
+                                <label for="password" style="display: inline-block; width: 150px;">Passwort:</label>
+                                <input type="password" name="password" style="width: 225px;">
                             </div>
                             <div class="user-info-column" style="margin-bottom: 10px;">
                                 <label for="role" style="display: inline-block; width: 150px;">Benutzertyp:</label>
