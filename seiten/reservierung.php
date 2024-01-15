@@ -173,6 +173,8 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
                     <?php }
                     // Wenn alle Bedingungen erfüllt sind, die Buchung in die Datenbank eintragen
                     else {
+                        $arrivaltime = date("Y-m-d", strtotime($arrivaltime));
+                        $departuretime = date("Y-m-d", strtotime($departuretime));
                         $sql = "INSERT INTO reservations (room, arrivaltime, departuretime, breakfast, pets, parking, sum, reservationdate, FK_userId) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = mysqli_stmt_init($conn);
@@ -198,12 +200,14 @@ function roomIsBooked($conn, $room, $arrivaltime, $departuretime)
                         } else {
                             $pets = "nicht inkludiert";
                         }
+                        $arrivaltime = date("d.m.Y", strtotime($arrival));
+                        $departuretime = date("d.m.Y", strtotime($departure));
                         ?>
                                 <div class="alert alert-success" role="alert">Deine Reise vom
                             <?php echo $arrivaltime ?> bis
                             <?php echo $departuretime ?> wurde mit folgenden Bemerkungen gebucht: Frühstück
-                            <?php echo $breakfast ?> Parkplatz
-                            <?php echo $parking ?> Haustiere
+                            <?php echo $breakfast ?>, Parkplatz
+                            <?php echo $parking ?>, Haustiere
                             <?php echo $pets ?>
                                 </div>
                         <?php

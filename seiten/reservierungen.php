@@ -49,13 +49,13 @@
                     // Ausgabe der Reservierungsinformationen
                     echo "Reservierung " . $number . "<br>";
                     echo "Zimmer: " . $row["room"] . "<br>";
-                    echo "Anreise: " . $row["arrivaltime"] . "<br>";
-                    echo "Abreise: " . $row["departuretime"] . "<br>";
+                    echo "Anreise: " . date("d.m.Y", strtotime($row["arrivaltime"])) . "<br>";
+                    echo "Abreise: " . date("d.m.Y", strtotime($row["departuretime"])) . "<br>";
                     echo "Frühstück: " . $breakfast . "<br>";
                     echo "Parkplatz: " . $parking . "<br>";
                     echo "Haustiere: " . $pets . "<br>";
                     echo "Preis: " . $row["sum"] . "€<br>";
-                    echo "Reservierungsdatum: " . date("d.m.y", strtotime($row["reservationDate"])) . "<br>";
+                    echo "Reservierungsdatum: " . date("d.m.Y", strtotime($row["reservationDate"])) . "<br>";
                     echo "Status: " . $row["status"] . "<br>";
                     echo "<br>";
                     $number++;
